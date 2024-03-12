@@ -28,21 +28,6 @@ end
 A=s_jam(1:num,:);%方向矩阵；
 A=A';
 
-% 稀疏表示参数
-param.L = 3;
-param.K = 45;
-param.numIteration = 50;
-param.errorFlag = 0;
-param.errorGoal = 1e-6;
-param.preserveDCAtom = 0;
-% Dictionary = randn(L,param.K);
-param.InitializationMethod = 'DataElements';
-param.displayProgress = 0;
-
-% L_train = 256; 
-% [Dictionary_base] = construct_multidictionary(fs,L_train,fa,fb,f0,param,num_max,s_jam);
-% Dictionary_base = load('dictionary_color.mat');
-% Dictionary_base = Dictionary_base.Dictionary_base;
 %%
 % 构造低通滤波器
 Wp=2*pi*30;
@@ -54,9 +39,9 @@ W=2*pi*fs1;
 [N1,Wn]=buttord(2*Wp/W,2*Ws/W,Rp,Rs);
 [b,a]=butter(N1,Wn);
 
-Nt=200; %Monte次数
+Nt=5000; %Monte次数
 jj=0;
-snr = 5;
+snr = 4;
 Am=10^(snr/10);
 L_circle = 30:10:300;
 L_length = length(L_circle);
@@ -65,7 +50,6 @@ Pd_RAIC=zeros(1,L_length);
 Pd_RMDL=zeros(1,L_length);
 Pd_RIBIC=zeros(1,L_length);
 Pd_ISSM=zeros(1,L_length);
-% Pd_MSRSE=zeros(1,L_length);
 for L=L_circle
     disp(['L is ',num2str(L)]);
     jj=jj+1;
@@ -74,9 +58,7 @@ for L=L_circle
     Ns_GDE=zeros(1,Nt);
     Ns_RIBIC=zeros(1,Nt);
     Ns_ISSM=zeros(1,Nt);
-%     Ns_MSRSE=zeros(1,Nt);
 for cc=1:Nt
-%     x=randn(num,L);
     x1 = zeros(num,L);
     for i=1:num
         [t1,at1,bt1,x1(i,:)]=narrow_signal(fs,L,fa,fb,f0);
@@ -97,7 +79,6 @@ for cc=1:Nt
     [GDE,Ns_GDE(cc)] = func_GDE(M,L,R);
     [RBIC,Ns_RIBIC(cc)] = func_RIBIC(1/(M*L),M,L,R);
     [ISSM,Ns_ISSM(cc)]=func_ISSM(X);
-%     [MSRSE,Ns_MSRSE(cc)] = func_MSRSE(L,Dictionary_base,num_max,X,param.L);
 
 end
 
@@ -106,16 +87,25 @@ Pd_RMDL(jj)=length(find(Ns_RMDL==num))./Nt;
 Pd_RAIC(jj)=length(find(Ns_RAIC==num))./Nt;
 Pd_RIBIC(jj)=length(find(Ns_RIBIC==num))./Nt;
 Pd_ISSM(jj)=length(find(Ns_ISSM==num))./Nt;
-% Pd_MSRSE(jj)=length(find(Ns_MSRSE==num))./Nt;
 
 end
  %%
-%  plot(L_circle,Pd_GDE,'>-',L_circle,Pd_MDL,'rs-',L_circle,Pd_AIC,'b*-',L_circle,Pd_IBIC,'r*-',L_circle,Pd_MIC,'o-',...
-%      L_circle,Pd_MSTDC,'b^-',L_circle,Pd_ISSM,'gs-',L_circle,Pd_LDFCM,'rv-',L_circle,Pd_MSRSE,'ms-');
-plot(L_circle,Pd_RAIC,'g*-',L_circle,Pd_RMDL,'bp-',...
-    L_circle,Pd_RIBIC,'rs-',L_circle,Pd_GDE,'m>-',L_circle,Pd_ISSM,'rd-');
+rgbTriplet = 0.01*round(100*[062 043 109;...
+    240 100 073;...
+    255 170 050;...
+    000 070 222;...
+    046 158 43;...
+    189 030 030]/255);
+ 
+hold on;
+plot(L_circle,Pd_RAIC,'Color',rgbTriplet(1,:),'Marker','*');
+plot(L_circle,Pd_RMDL,'Color',rgbTriplet(2,:),'Marker','p');
+plot(L_circle,Pd_RIBIC,'Color',rgbTriplet(3,:),'Marker','o');
+plot(L_circle,Pd_GDE,'Color',rgbTriplet(4,:),'Marker','^');
+plot(L_circle,Pd_ISSM,'Color',rgbTriplet(5,:),'Marker','d');
+
 xlabel('快拍数');
 ylabel('正确检测概率');
 axis([min(L_circle) max(L_circle) 0 1]);
-legend('RAIC','RMDL','RNBIC','GDE','ISSM');
+legend('RAIC','RMDL','RNBIC','GDE','ISSM','Location','southeast');
 toc;

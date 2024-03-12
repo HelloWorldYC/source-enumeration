@@ -80,7 +80,6 @@ for SNR=snr_min:snr_max
     Ns_ISSM=zeros(1,Nt);
     Ns_MSRSE=zeros(1,Nt);
 for cc=1:Nt
-%     x=randn(num,L);
     x1 = zeros(num,L);
     for i=1:num
         [t1,at1,bt1,x1(i,:)]=narrow_signal(fs,L,fa,fb,f0);
@@ -96,10 +95,10 @@ for cc=1:Nt
     [u,v]=svd(R);
     T=diag(v);
     T1=T+sqrt(sum(T));
-    [AIC,Ns_RAIC(cc)] = func_AIC(M,L,T1);
-    [MDL,Ns_RMDL(cc)] = func_MDL(M,L,T1);
+    [RAIC,Ns_RAIC(cc)] = func_AIC(M,L,T1);
+    [RMDL,Ns_RMDL(cc)] = func_MDL(M,L,T1);
     [GDE,Ns_GDE(cc)] = func_GDE(M,L,R);
-    [BIC,Ns_RIBIC(cc)] = func_RIBIC(1/(M*L),M,L,R);
+    [RIBIC,Ns_RIBIC(cc)] = func_RIBIC(1/(M*L),M,L,R);
     [ISSM,Ns_ISSM(cc)]=func_ISSM(X);
     [MSRSE,Ns_MSRSE(cc)] = func_MSRSE(L,Dictionary_base,num_max,X,param.L);
 end
@@ -113,14 +112,25 @@ Pd_MSRSE(jj)=length(find(Ns_MSRSE==num))./Nt;
 
 end
 %%
+rgbTriplet = 0.01*round(100*[062 043 109;...
+    240 100 073;...
+    255 170 050;...
+    000 070 222;...
+    046 158 43;...
+    189 030 030]/255);
+
 xx=snr_min:snr_max;
-% plot(xx,Pd_AIC,'g*-',xx,Pd_MDL,'bp-',xx,Pd_GDE,'m>-',...
-%      xx,Pd_MSTDC,'go-',xx,Pd_IBIC,'b^-',xx,Pd_ISSM,'md-',xx,Pd_MSRSE,'rs-');
-plot(xx,Pd_RAIC,'g*-',xx,Pd_RMDL,'bp-',xx,Pd_RIBIC,'rs-',...
-    xx,Pd_GDE,'m>-',xx,Pd_ISSM,'rd-',xx,Pd_MSRSE,'rs-');
+
+hold on;
+plot(xx,Pd_RAIC,'Color',rgbTriplet(1,:),'Marker','*');
+plot(xx,Pd_RMDL,'Color',rgbTriplet(2,:),'Marker','p');
+plot(xx,Pd_RIBIC,'Color',rgbTriplet(3,:),'Marker','o');
+plot(xx,Pd_GDE,'Color',rgbTriplet(4,:),'Marker','^');
+plot(xx,Pd_ISSM,'Color',rgbTriplet(5,:),'Marker','d');
+plot(xx,Pd_MSRSE,'Color',rgbTriplet(6,:),'Marker','s');
+ 
 xlabel('信噪比(dB)');
 ylabel('正确检测概率');
 axis([snr_min snr_max 0 1]);
-% legend('AIC','MDL','GDE','MSTDC','NBIC','ISSM','proposed');
-legend('RAIC','RMDL','RNBIC','GDE','ISSM','本文算法');
+legend('RAIC','RMDL','RNBIC','GDE','ISSM','本文算法','Location','southeast');
 % toc;

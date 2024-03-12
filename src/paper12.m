@@ -60,7 +60,7 @@ A=A';
 end
 
 %%
-Nt=200; %Monte次数
+Nt=5000; %Monte次数
 jj=0;
 SNR = 3;
 sensor_length = sensor_max-sensor_min + 1;
@@ -107,7 +107,6 @@ for cc=1:Nt
 
     [u,v]=svd(R);
     T=diag(v);
-%     T1=T+sqrt(sum(T));
     [RAIC,Ns_AIC(cc)] = func_AIC(sensor,L,T);
     [RMDL,Ns_MDL(cc)] = func_MDL(sensor,L,T);
     [GDE,Ns_GDE(cc)] = func_GDE(sensor,L,R);
@@ -126,13 +125,24 @@ Pd_MSRSE(jj)=length(find(Ns_MSRSE==num))./Nt;
 
 end
 %%
+rgbTriplet = 0.01*round(100*[062 043 109;...
+    240 100 073;...
+    255 170 050;...
+    000 070 222;...
+    046 158 43;...
+    189 030 030]/255);
+
 xx=sensor_min:1:sensor_max;
-% plot(xx,Pd_AIC,'g*-',xx,Pd_MDL,'bp-',xx,Pd_GDE,'m>-',...
-%      xx,Pd_MSTDC,'go-',xx,Pd_IBIC,'b^-',xx,Pd_ISSM,'md-',xx,Pd_MSRSE,'rs-');
-plot(xx,Pd_AIC,'g*-',xx,Pd_MDL,'bp-',xx,Pd_IBIC,'rs-',...
-    xx,Pd_GDE,'m>-',xx,Pd_ISSM,'rd-',xx,Pd_MSRSE,'rs-');
+hold on;
+plot(xx,Pd_AIC,'Color',rgbTriplet(1,:),'Marker','*');
+plot(xx,Pd_MDL,'Color',rgbTriplet(2,:),'Marker','p');
+plot(xx,Pd_IBIC,'Color',rgbTriplet(3,:),'Marker','o');
+plot(xx,Pd_GDE,'Color',rgbTriplet(4,:),'Marker','^');
+plot(xx,Pd_ISSM,'Color',rgbTriplet(5,:),'Marker','d');
+plot(xx,Pd_MSRSE,'Color',rgbTriplet(6,:),'Marker','s');
+
 xlabel('阵元数');
 ylabel('正确检测概率');
 axis([sensor_min sensor_max 0 1]);
-legend('AIC','MDL','NBIC','GDE','ISSM','本文算法');
+legend('AIC','MDL','NBIC','GDE','ISSM','本文算法','Location','southeast');
 % toc;

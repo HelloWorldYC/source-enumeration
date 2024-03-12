@@ -52,7 +52,7 @@ W=2*pi*fs1;
 [N1,Wn]=buttord(2*Wp/W,2*Ws/W,Rp,Rs);
 [b,a]=butter(N1,Wn);
 
-Nt=200; %Monte次数
+Nt=5000; %Monte次数
 jj=0;
 snr = 10;
 Am=10^(snr/10);
@@ -95,7 +95,7 @@ for cc=1:Nt
     [RAIC,Ns_RAIC(cc)] = func_AIC(M,L,T1);
     [RMDL,Ns_RMDL(cc)] = func_MDL(M,L,T1);
     [GDE,Ns_GDE(cc)] = func_GDE(M,L,R);
-    [RBIC,Ns_RIBIC(cc)] = func_RIBIC(1/(M*L),M,L,R);
+    [RIBIC,Ns_RIBIC(cc)] = func_RIBIC(1/(M*L),M,L,R);
     [ISSM,Ns_ISSM(cc)]=func_ISSM(X);
     [MSRSE,Ns_MSRSE(cc)] = func_MSRSE(L,Dictionary_base,num_max,X,param.L);
 
@@ -110,12 +110,23 @@ Pd_MSRSE(jj)=length(find(Ns_MSRSE==num))./Nt;
 
 end
 %%
-% plot(num_circle,Pd_AIC,'g*-',num_circle,Pd_MDL,'bp-',num_circle,Pd_GDE,'m>-',...
-%      num_circle,Pd_MSTDC,'go-',num_circle,Pd_IBIC,'b^-',num_circle,Pd_ISSM,'md-',num_circle,Pd_MSRSE,'rs-');
-plot(num_circle,Pd_RAIC,'g*-',num_circle,Pd_RMDL,'bp-',num_circle,Pd_RIBIC,'rs-',...
-    num_circle,Pd_GDE,'m>-',num_circle,Pd_ISSM,'rd-',num_circle,Pd_MSRSE,'rs-');
+rgbTriplet = 0.01*round(100*[062 043 109;...
+    240 100 073;...
+    255 170 050;...
+    000 070 222;...
+    046 158 43;...
+    189 030 030]/255);
+
+hold on;
+plot(num_circle,Pd_RAIC,'Color',rgbTriplet(1,:),'Marker','*');
+plot(num_circle,Pd_RMDL,'Color',rgbTriplet(2,:),'Marker','p');
+plot(num_circle,Pd_RIBIC,'Color',rgbTriplet(3,:),'Marker','o');
+plot(num_circle,Pd_GDE,'Color',rgbTriplet(4,:),'Marker','^');
+plot(num_circle,Pd_ISSM,'Color',rgbTriplet(5,:),'Marker','d');
+plot(num_circle,Pd_MSRSE,'Color',rgbTriplet(6,:),'Marker','s');
+
 xlabel('信号源数');
 ylabel('正确检测概率');
 axis([min(num_circle) max(num_circle) 0 1]);
-legend('AIC','MDL','NBIC','GDE','ISSM','本文算法');
+legend('RAIC','RMDL','RNBIC','GDE','ISSM','本文算法','Location','southwest');
 toc;
