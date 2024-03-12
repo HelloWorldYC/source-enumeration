@@ -51,7 +51,7 @@ end
 %%
 Nt=5000; %Monte次数
 jj=0;
-SNR = -5;
+SNR = -6;
 sensor_length = sensor_max-sensor_min + 1;
 Pd_AIC=zeros(1,sensor_length);
 Pd_MDL=zeros(1,sensor_length);
@@ -113,6 +113,7 @@ plot(xx,Pd_AIC,'Color',rgbTriplet(1,:),'Marker','*');
 plot(xx,Pd_MDL,'Color',rgbTriplet(2,:),'Marker','p');
 plot(xx,Pd_IBIC,'Color',rgbTriplet(3,:),'Marker','o');
 
+box on;
 xlabel('阵元数');
 ylabel('正确检测概率');
 axis([sensor_min sensor_max 0 1]);

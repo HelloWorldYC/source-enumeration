@@ -109,6 +109,7 @@ plot(xx,Pd_RIBIC,'Color',rgbTriplet(3,:),'Marker','o');
 plot(xx,Pd_GDE,'Color',rgbTriplet(4,:),'Marker','^');
 plot(xx,Pd_ISSM,'Color',rgbTriplet(5,:),'Marker','d');
 
+box on;
 xlabel('信噪比(dB)');
 ylabel('正确检测概率');
 axis([snr_min snr_max 0 1]);

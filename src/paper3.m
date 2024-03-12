@@ -93,6 +93,7 @@ plot(num_circle,Pd_AIC,'Color',rgbTriplet(1,:),'Marker','*');
 plot(num_circle,Pd_MDL,'Color',rgbTriplet(2,:),'Marker','p');
 plot(num_circle,Pd_IBIC,'Color',rgbTriplet(3,:),'Marker','o');
 
+box on;
 xlabel('信号源数');
 ylabel('正确检测概率');
 axis([min(num_circle) max(num_circle) 0 1]);

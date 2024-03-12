@@ -106,6 +106,7 @@ plot(num_circle,Pd_RIBIC,'Color',rgbTriplet(3,:),'Marker','o');
 plot(num_circle,Pd_GDE,'Color',rgbTriplet(4,:),'Marker','^');
 plot(num_circle,Pd_ISSM,'Color',rgbTriplet(5,:),'Marker','d');
 
+box on;
 xlabel('信号源数');
 ylabel('正确检测概率');
 axis([min(num_circle) max(num_circle) 0 1]);

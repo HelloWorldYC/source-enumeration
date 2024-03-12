@@ -141,6 +141,7 @@ plot(xx,Pd_GDE,'Color',rgbTriplet(4,:),'Marker','^');
 plot(xx,Pd_ISSM,'Color',rgbTriplet(5,:),'Marker','d');
 plot(xx,Pd_MSRSE,'Color',rgbTriplet(6,:),'Marker','s');
 
+box on;
 xlabel('阵元数');
 ylabel('正确检测概率');
 axis([sensor_min sensor_max 0 1]);

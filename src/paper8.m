@@ -51,7 +51,7 @@ end
 %%
 Nt=5000; %Monte次数
 jj=0;
-SNR = 3;
+SNR = -5;
 sensor_length = sensor_max-sensor_min + 1;
 Pd_GDE=zeros(1,sensor_length);
 Pd_RAIC=zeros(1,sensor_length);
@@ -128,6 +128,7 @@ plot(xx,Pd_RIBIC,'Color',rgbTriplet(3,:),'Marker','o');
 plot(xx,Pd_GDE,'Color',rgbTriplet(4,:),'Marker','^');
 plot(xx,Pd_ISSM,'Color',rgbTriplet(5,:),'Marker','d');
 
+box on;
 xlabel('阵元数');
 ylabel('正确检测概率');
 axis([sensor_min sensor_max 0 1]);

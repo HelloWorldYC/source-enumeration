@@ -125,6 +125,7 @@ plot(L_circle,Pd_GDE,'Color',rgbTriplet(4,:),'Marker','^');
 plot(L_circle,Pd_ISSM,'Color',rgbTriplet(5,:),'Marker','d');
 plot(L_circle,Pd_MSRSE,'Color',rgbTriplet(6,:),'Marker','s');
 
+box on;
 xlabel('快拍数');
 ylabel('正确检测概率');
 axis([min(L_circle) max(L_circle) 0 1]);
