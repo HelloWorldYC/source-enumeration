@@ -51,7 +51,7 @@ end
 %%
 Nt=5000; %Monte´ÎÊý
 jj=0;
-SNR = -5;
+SNR = 3;
 sensor_length = sensor_max-sensor_min + 1;
 Pd_GDE=zeros(1,sensor_length);
 Pd_RAIC=zeros(1,sensor_length);
