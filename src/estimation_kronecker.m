@@ -99,7 +99,7 @@ T=diag(v);
 [AIC,Ns_AIC(cc)] = func_AIC(M1,L1,T);
 [MDL,Ns_MDL(cc)] = func_MDL(M1,L1,T);
 [GDE,Ns_GDE(cc)] = func_GDE(M1,L1,Y);
-[BIC,Ns_BIC(cc)] = func_BIC(1/(M1*L1),M1,L1,Y);
+[BIC,Ns_BIC(cc)] = func_NBIC(1/(M1*L1),M1,L1,Y);
 [BIC_qita10,Ns_BIC_qita10(cc)] = func_BIC(10/(M1*L1),M1,L1,Y);
 [BIC_qita100,Ns_BIC_qita100(cc)] = func_BIC(100/(M1*L1),M1,L1,Y);
 end

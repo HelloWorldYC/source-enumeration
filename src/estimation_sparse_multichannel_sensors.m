@@ -73,7 +73,7 @@ sensor_length = sensor_max-sensor_min + 1;
 Pd_GDE=zeros(1,sensor_length);
 Pd_AIC=zeros(1,sensor_length);
 Pd_MDL=zeros(1,sensor_length);
-Pd_IBIC=zeros(1,sensor_length);
+Pd_NBIC=zeros(1,sensor_length);
 Pd_MIC=zeros(1,sensor_length);
 Pd_MSTDC=zeros(1,sensor_length);
 Pd_ISSM=zeros(1,sensor_length);
@@ -100,7 +100,7 @@ for sensor=sensor_min:1:sensor_max
     Ns_AIC=zeros(1,Nt);
     Ns_MDL=zeros(1,Nt);
     Ns_GDE=zeros(1,Nt);
-    Ns_IBIC=zeros(1,Nt);
+    Ns_NBIC=zeros(1,Nt);
     Ns_MIC=zeros(1,Nt);
     Ns_MSTDC=zeros(1,Nt);
     Ns_ISSM=zeros(1,Nt);
@@ -127,7 +127,7 @@ parfor cc=1:Nt
     [AIC,Ns_AIC(cc)] = func_AIC(sensor,L,T);
     [MDL,Ns_MDL(cc)] = func_MDL(sensor,L,T);
     [GDE,Ns_GDE(cc)] = func_GDE(sensor,L,R);
-    [BIC,Ns_IBIC(cc)] = func_IBIC(1/(sensor*L),sensor,L,R);
+    [NBIC,Ns_NBIC(cc)] = func_NBIC(1/(sensor*L),sensor,L,R);
     [MIC,Ns_MIC(cc)] = func_MIC(X,sensor,L);
     [MSTDC,Ns_MSTDC(cc)] = func_MSTDC(X,sensor,L);
     [ISSM,Ns_ISSM(cc)]=func_ISSM(X);
@@ -139,7 +139,7 @@ end
 Pd_GDE(jj)=length(find(Ns_GDE==num))./Nt; 
 Pd_MDL(jj)=length(find(Ns_MDL==num))./Nt;
 Pd_AIC(jj)=length(find(Ns_AIC==num))./Nt;
-Pd_IBIC(jj)=length(find(Ns_IBIC==num))./Nt;
+Pd_NBIC(jj)=length(find(Ns_NBIC==num))./Nt;
 Pd_MIC(jj)=length(find(Ns_MIC==num))./Nt;
 Pd_MSTDC(jj)=length(find(Ns_MSTDC==num))./Nt;
 Pd_ISSM(jj)=length(find(Ns_ISSM==num))./Nt;
@@ -152,7 +152,7 @@ end
 %%
 xx=sensor_min:1:sensor_max;
 plot(xx,Pd_AIC,'g*-',xx,Pd_MDL,'bp-',xx,Pd_GDE,'m>-',...
-     xx,Pd_MSTDC,'go-',xx,Pd_IBIC,'b^-',xx,Pd_ISSM,'md-',xx,Pd_MSRSE,'rs-');
+     xx,Pd_MSTDC,'go-',xx,Pd_NBIC,'b^-',xx,Pd_ISSM,'md-',xx,Pd_MSRSE,'rs-');
 % plot(xx,Pd_AIC,'>-',xx,Pd_MDL,'rs-',xx,Pd_GDE,'o-',xx,Pd_BIC,'b^-',xx,Pd_MIC,'c*-',xx,Pd_MSTDC,'r*-');
 % title(['白噪声下',num2str(Array_Num),'线阵估计',num2str(num),'个信源']);
 xlabel('Number of Sensors');

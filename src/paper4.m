@@ -55,7 +55,7 @@ SNR = -6;
 sensor_length = sensor_max-sensor_min + 1;
 Pd_AIC=zeros(1,sensor_length);
 Pd_MDL=zeros(1,sensor_length);
-Pd_IBIC=zeros(1,sensor_length);
+Pd_NBIC=zeros(1,sensor_length);
 
 coef = cell(1,num_max);
 for sensor=sensor_min:1:sensor_max
@@ -73,7 +73,7 @@ for sensor=sensor_min:1:sensor_max
     jj=jj+1;
     Ns_AIC=zeros(1,Nt);
     Ns_MDL=zeros(1,Nt);
-    Ns_IBIC=zeros(1,Nt);
+    Ns_NBIC=zeros(1,Nt);
 for cc=1:Nt
     x1 = zeros(num,L);
     for i=1:num
@@ -89,15 +89,21 @@ for cc=1:Nt
     T=diag(v);
     [AIC,Ns_AIC(cc)] = func_AIC(sensor,L,T);
     [MDL,Ns_MDL(cc)] = func_MDL(sensor,L,T);
-    [BIC,Ns_IBIC(cc)] = func_IBIC(1/(sensor*L),sensor,L,R);
+    [BIC,Ns_NBIC(cc)] = func_NBIC(1/(sensor*L),sensor,L,R);
 
 end
 
 Pd_AIC(jj)=length(find(Ns_AIC==num))./Nt;
 Pd_MDL(jj)=length(find(Ns_MDL==num))./Nt;
-Pd_IBIC(jj)=length(find(Ns_IBIC==num))./Nt;
+Pd_NBIC(jj)=length(find(Ns_NBIC==num))./Nt;
 
 end
+
+%%
+savefilename = strcat('./detection_probability/paper4_whitenoise_snr', num2str(SNR), ...
+    '_snapshot',num2str(L),'_sources',num2str(num),'_sensors',num2str(sensor_min),'to',num2str(sensor_max),'.mat');
+save(savefilename,'Pd_AIC','Pd_MDL','Pd_NBIC');
+
 %%
 rgbTriplet = 0.01*round(100*[062 043 109;...
     240 100 073;...
@@ -111,11 +117,14 @@ xx=sensor_min:1:sensor_max;
 hold on;
 plot(xx,Pd_AIC,'Color',rgbTriplet(1,:),'Marker','*');
 plot(xx,Pd_MDL,'Color',rgbTriplet(2,:),'Marker','p');
-plot(xx,Pd_IBIC,'Color',rgbTriplet(3,:),'Marker','o');
+plot(xx,Pd_NBIC,'Color',rgbTriplet(3,:),'Marker','o');
 
 box on;
 xlabel('阵元数');
 ylabel('正确检测概率');
 axis([sensor_min sensor_max 0 1]);
 legend('AIC','MDL','NBIC','Location','southeast');
+
+% 保存图形并指定 DPI 为 600
+print('F:/研究生事项/毕业答辩/毕业论文/论文图片/第三章白噪声下实验不同阵元数.png', '-dpng', '-r600');
 % toc;

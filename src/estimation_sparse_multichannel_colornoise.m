@@ -65,7 +65,7 @@ snr_length = snr_max-snr_min+1;
 Pd_GDE=zeros(1,snr_length);
 Pd_AIC=zeros(1,snr_length);
 Pd_MDL=zeros(1,snr_length);
-Pd_IBIC=zeros(1,snr_length);
+Pd_NBIC=zeros(1,snr_length);
 Pd_MIC=zeros(1,snr_length);
 Pd_MSTDC=zeros(1,snr_length);
 Pd_ISSM=zeros(1,snr_length);
@@ -85,7 +85,7 @@ for SNR=snr_min:snr_max
     Ns_AIC=zeros(1,Nt);
     Ns_MDL=zeros(1,Nt);
     Ns_GDE=zeros(1,Nt);
-    Ns_IBIC=zeros(1,Nt);
+    Ns_NBIC=zeros(1,Nt);
     Ns_MIC=zeros(1,Nt);
     Ns_MSTDC=zeros(1,Nt);
     Ns_ISSM=zeros(1,Nt);
@@ -119,7 +119,7 @@ parfor cc=1:Nt
     [AIC,Ns_AIC(cc)] = func_AIC(M,L,T);
     [MDL,Ns_MDL(cc)] = func_MDL(M,L,T);
     [GDE,Ns_GDE(cc)] = func_GDE(M,L,R);
-    [IBIC,Ns_IBIC(cc)] = func_IBIC(1/(M*L),M,L,R);
+    [NBIC,Ns_NBIC(cc)] = func_NBIC(1/(M*L),M,L,R);
     [MIC,Ns_MIC(cc)] = func_MIC(X,M,L);
     [MSTDC,Ns_MSTDC(cc)] = func_MSTDC(X,M,L);
     [ISSM,Ns_ISSM(cc)]=func_ISSM(X);
@@ -133,7 +133,7 @@ end
 Pd_GDE(jj)=length(find(Ns_GDE==num))./Nt;
 Pd_MDL(jj)=length(find(Ns_MDL==num))./Nt;
 Pd_AIC(jj)=length(find(Ns_AIC==num))./Nt;
-Pd_IBIC(jj)=length(find(Ns_IBIC==num))./Nt;
+Pd_NBIC(jj)=length(find(Ns_NBIC==num))./Nt;
 Pd_MIC(jj)=length(find(Ns_MIC==num))./Nt;
 Pd_MSTDC(jj)=length(find(Ns_MSTDC==num))./Nt;
 Pd_ISSM(jj)=length(find(Ns_ISSM==num))./Nt;
@@ -145,7 +145,7 @@ end
  %%
 xx=snr_min:snr_max;
 plot(xx,Pd_AIC,'g*-',xx,Pd_MDL,'bp-',xx,Pd_GDE,'m>-',...
-     xx,Pd_MSTDC,'go-',xx,Pd_IBIC,'b^-',xx,Pd_ISSM,'md-',xx,Pd_MSRSE,'rs-');
+     xx,Pd_MSTDC,'go-',xx,Pd_NBIC,'b^-',xx,Pd_ISSM,'md-',xx,Pd_MSRSE,'rs-');
 % title(['色噪声下',num2str(Array_Num),'线阵估计',num2str(num),'个信源']);
 xlabel('SNR(dB)');
 ylabel('Probability of Correct Detection');

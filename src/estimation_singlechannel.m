@@ -1,11 +1,11 @@
 %% 程序说明
-%  功能： 利用双树复小波分解单通道信号，再利用传统算法估计信源
-%  码猿： 马叶椿
-%  版本： v1.0 - 2021.12.16
+%  功能�? 利用双树复小波分解单通道信号，再利用传统算法估计信源
+%  码猿�? 马叶�?
+%  版本�? v1.0 - 2021.12.16
 
-%% 构造单通道信号
-% 单通道信号构造比较简单，不需要通过方向矢量矩阵来构造，因为不存在阵元之间的关系
-% 直接将几个信号源按增益叠加在一起即可，这个增益就是天线对信号源的增益，已经包括
+%% 构�?�单通道信号
+% 单�?�道信号构�?�比较简单，不需要�?�过方向矢量矩阵来构造，因为不存在阵元之间的关系
+% 直接将几个信号源按增益叠加在�?起即可，这个增益就是天线对信号源的增益，已经包括
 % 了入射方向的影响
 clear;
 clc;
@@ -18,17 +18,17 @@ fa = 8.5e6;
 fb = 8.5e6;
 Ns = 512;
 L=Ns;
-num = 3;    % 信源数
+num = 3;    % 信源�?
 d=0.5; %线阵半径
 lamda=1; %波长
 kk=6;    %线阵
 
-% 入射角
+% 入射�?
 theta_jam1=10;
 theta_jam2=40;
 theta_jam3=70;
 
-%方位角
+%方位�?
 alfa_jam1=10;
 alfa_jam2=50;
 alfa_jam3=90;
@@ -36,11 +36,11 @@ alfa_jam3=90;
 s_jam1=array_form(1,d,lamda,theta_jam1,alfa_jam1,kk);
 s_jam2=array_form(1,d,lamda,theta_jam2,alfa_jam2,kk);
 s_jam3=array_form(1,d,lamda,theta_jam3,alfa_jam3,kk);
-A=[s_jam1;s_jam2;s_jam3];%方向矩阵；
+A=[s_jam1;s_jam2;s_jam3];%方向矩阵�?
 A=A';
 
-%% 不同信噪比下的 Monte-Carlo 实验
-monte=50;           %Monte-Carlo模拟的次数
+%% 不同信噪比下�? Monte-Carlo 实验
+monte=50;           %Monte-Carlo模拟的次�?
 biort = 'near_sym_b';
 qshift = 'qshift_d';
 nlevel = 10;
@@ -50,7 +50,7 @@ times = 20;
 accuracy_SNR_AIC = zeros(1,length(SNR));
 accuracy_SNR_MDL = zeros(1,length(SNR));
 accuracy_SNR_GDE = zeros(1,length(SNR));
-accuracy_SNR_BIC = zeros(1,length(SNR));
+accuracy_SNR_NBIC = zeros(1,length(SNR));
 accuracy_SNR_AIC_EMD = zeros(1,length(SNR));
 accuracy_SNR_MDL_EMD = zeros(1,length(SNR));
 accuracy_SNR_GDE_EMD = zeros(1,length(SNR));
@@ -68,7 +68,7 @@ parfor i = 1:1:length(SNR)
     Ns_AIC=zeros(2,monte);
     Ns_MDL=zeros(2,monte);
     Ns_GDE=zeros(2,monte);
-    Ns_BIC=zeros(2,monte);
+    Ns_NBIC=zeros(2,monte);
     Ns_jackknife_emd_MIC=zeros(1,monte);
     Ns_jackknife_emd_MSTDC=zeros(1,monte);
     for mk = 1:1:monte
@@ -92,8 +92,8 @@ parfor i = 1:1:length(SNR)
         X = X';
         [Ns_jackknife_emd_MIC(mk),Ns_jackknife_emd_MSTDC(mk)] = func_jackkinfe_emd(X,rou,times);
        %% DCTWT分解
-        %（二维的双树复小波有六个分解方向 ±15，±45，±75，但不意味着分解六层，
-        % 对于一维来说，是没有这么多分解方向的，所以分解层数可选）
+        %（二维的双树复小波有六个分解方向 ±15，�?45，�?75，但不意味着分解六层�?
+        % 对于�?维来说，是没有这么多分解方向的，�?以分解层数可选）
         [Yl,Yh,Yscale] = dtwavexfm(X,nlevel,biort,qshift);
         
 %         for j = 1:nlevel
@@ -124,7 +124,7 @@ parfor i = 1:1:length(SNR)
         [AIC,Ns_AIC(1,mk)] = func_AIC(M1,L,T1);
         [MDL,Ns_MDL(1,mk)] = func_MDL(M1,L,T1);
         [GDE,Ns_GDE(1,mk)] = func_GDE(M1,L,R1);
-        [BIC,Ns_BIC(1,mk)] = func_IBIC(1/(M1*L),M1,L,R1);
+        [NBIC,Ns_NBIC(1,mk)] = func_NBIC(1/(M1*L),M1,L,R1);
         %% EMD分解
          emd_num = 8;
          Y2 = emd(X,'MaxNumIMF',emd_num);
@@ -141,16 +141,16 @@ parfor i = 1:1:length(SNR)
          [AIC,Ns_AIC(2,mk)] = func_AIC(M2,L,T2);
          [MDL,Ns_MDL(2,mk)] = func_MDL(M2,L,T2);
          [GDE,Ns_GDE(2,mk)] = func_GDE(M2,L,R2);
-         [BIC,Ns_BIC(2,mk)] = func_IBIC(1/(M2*L),M2,L,R2);
+         [BIC,Ns_NBIC(2,mk)] = func_IBIC(1/(M2*L),M2,L,R2);
     end
     accuracy_SNR_GDE(i)=length(find(Ns_GDE(1,:)==num))./monte;
     accuracy_SNR_MDL(i)=length(find(Ns_MDL(1,:)==num))./monte;
     accuracy_SNR_AIC(i)=length(find(Ns_AIC(1,:)==num))./monte;
-    accuracy_SNR_BIC(i)=length(find(Ns_BIC(1,:)==num))./monte;
+    accuracy_SNR_NBIC(i)=length(find(Ns_NBIC(1,:)==num))./monte;
     accuracy_SNR_GDE_EMD(i)=length(find(Ns_GDE(2,:)==num))./monte;
     accuracy_SNR_MDL_EMD(i)=length(find(Ns_MDL(2,:)==num))./monte;
     accuracy_SNR_AIC_EMD(i)=length(find(Ns_AIC(2,:)==num))./monte;
-    accuracy_SNR_BIC_EMD(i)=length(find(Ns_BIC(2,:)==num))./monte;
+    accuracy_SNR_BIC_EMD(i)=length(find(Ns_NBIC(2,:)==num))./monte;
     accuracy_SNR_jackkingfe_emd_MIC(i)=length(find(Ns_jackknife_emd_MIC==num))./monte;
     accuracy_SNR_jackkingfe_emd_MSTDC(i)=length(find(Ns_jackknife_emd_MSTDC==num))./monte;
 end
@@ -160,7 +160,7 @@ figure(3);
 hold on;
 plot(SNR,accuracy_SNR_MDL,'gX-');
 plot(SNR,accuracy_SNR_AIC,'o-');
-plot(SNR,accuracy_SNR_BIC,'p-');
+plot(SNR,accuracy_SNR_NBIC,'p-');
 plot(SNR,accuracy_SNR_GDE_EMD,'ks-');
 plot(SNR,accuracy_SNR_MDL_EMD,'r*-');
 plot(SNR,accuracy_SNR_AIC_EMD,'c*-');
@@ -169,7 +169,7 @@ plot(SNR,accuracy_SNR_jackkingfe_emd_MIC,'rs-');
 plot(SNR,accuracy_SNR_jackkingfe_emd_MSTDC,'gs-');
 xlabel('SNR');
 ylabel('accuracy');
-% title(['DTCWT分解层数为:',num2str(nlevel),'    EMD分解层数为:',num2str(emd_num)]);
+% title(['DTCWT分解层数�?:',num2str(nlevel),'    EMD分解层数�?:',num2str(emd_num)]);
 legend({'DTCWT_MDL','DTCWT_AIC','DTCWT_BIC','EMD_GDE','EMD_MDL','EMD_AIC','EMD_BIC','jk_emd_MIC','jk_emd_MSTDC'},'Interpreter','none');
 
 %%
@@ -187,8 +187,8 @@ noise = randn(1,L);
 Am=10^(15/10);
 X = Am*s+noise;
 % X = awgn(s,20,'measured');
-Rtau=xcorr(X);                            %自相关函数
-Sx=fft(Rtau);                             %功率谱密度
+Rtau=xcorr(X);                            %自相关函�?
+Sx=fft(Rtau);                             %功率谱密�?
 len=length(Sx);
 k=0:len-1;
 w=2*pi*(k/len-1/2)*fs;

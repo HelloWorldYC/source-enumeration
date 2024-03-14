@@ -5,7 +5,7 @@
 %       v1.1-2022.02.28
 
 %% 
-function [IBIC,Ns_IBIC] = func_IBIC(qita,m,n,R)
+function [NBIC,Ns_NBIC] = func_NBIC(qita,m,n,R)
 c = m/n;
 miu = (1+sqrt(c))^2;
 sigma = ((1+sqrt(c))^(4/3))/(n*sqrt(c));
@@ -19,7 +19,7 @@ for k=1:m-1
     fai(k) = ((m*n)+(m-n)*(k-1))*log10(1+((delta-1)/(m-k+1)))+(m-n)*log10(delta);
 end
 
-IBIC = zeros(1,m-1);
+NBIC = zeros(1,m-1);
 for k=1:m-1
     tao(k) = (1/(m-k))*(sum(S(k+1:m)));
 end
@@ -30,9 +30,9 @@ for k=1:m-1
        temp = temp*S(j);
        temp1 = temp1+fai(j)+m*log10(tao(k)/S(j));
     end
-    IBIC(k) = n*log10((tao(k)^(m-k))*temp)+temp1;
+    NBIC(k) = n*log10((tao(k)^(m-k))*temp)+temp1;
 end
 
-[IBIC_min,Ns_IBIC] = min(IBIC);
+[NBIC_min,Ns_NBIC] = min(NBIC);
 
 end

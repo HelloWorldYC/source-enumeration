@@ -39,7 +39,7 @@ snr_max = 20;
 snr_length = snr_max-snr_min+1;
 Pd_AIC=zeros(1,snr_length);
 Pd_MDL=zeros(1,snr_length);
-Pd_IBIC=zeros(1,snr_length);
+Pd_NBIC=zeros(1,snr_length);
 coef = cell(1,num_max);
 for SNR=snr_min:snr_max 
     disp(['SNR is ',num2str(SNR)]);
@@ -47,7 +47,7 @@ for SNR=snr_min:snr_max
     jj=jj+1;
     Ns_AIC=zeros(1,Nt);
     Ns_MDL=zeros(1,Nt);
-    Ns_IBIC=zeros(1,Nt);
+    Ns_NBIC=zeros(1,Nt);
 for cc=1:Nt
     x1 = zeros(num,L);
     for i=1:num
@@ -63,14 +63,27 @@ for cc=1:Nt
     T=diag(v);
     [AIC,Ns_AIC(cc)] = func_AIC(M,L,T);
     [MDL,Ns_MDL(cc)] = func_MDL(M,L,T);
-    [IBIC,Ns_IBIC(cc)] = func_IBIC(1/(M*L),M,L,R);
+    [NBIC,Ns_NBIC(cc)] = func_NBIC(1/(M*L),M,L,R);
 end
 
 Pd_MDL(jj)=length(find(Ns_MDL==num))./Nt;
 Pd_AIC(jj)=length(find(Ns_AIC==num))./Nt;
-Pd_IBIC(jj)=length(find(Ns_IBIC==num))./Nt;
+Pd_NBIC(jj)=length(find(Ns_NBIC==num))./Nt;
 
 end
+
+%%
+savefilename = strcat('./detection_probability/paper1_whitenoise_snr', num2str(snr_min), 'to', num2str(snr_max),...
+    '_snapshot',num2str(L),'_sources',num2str(num),'_sensors',num2str(Array_Num),'.mat');
+save(savefilename,'Pd_AIC','Pd_MDL','Pd_NBIC');
+
+% pdaic=load(savefilename,'Pd_AIC');
+% pdaic=pdaic.Pd_AIC;
+% pdmdl=load(savefilename,'Pd_MDL');
+% pdmdl=pdmdl.Pd_MDL;
+% pdnbic=load(savefilename,'Pd_NBIC');
+% pdnbic=pdnbic.Pd_NBIC;
+
 %%
 rgbTriplet = 0.01*round(100*[062 043 109;...
     240 100 073;...
@@ -84,11 +97,14 @@ xx=snr_min:snr_max;
 hold on;
 plot(xx,Pd_AIC,'Color',rgbTriplet(1,:),'Marker','*');
 plot(xx,Pd_MDL,'Color',rgbTriplet(2,:),'Marker','p');
-plot(xx,Pd_IBIC,'Color',rgbTriplet(3,:),'Marker','o');
+plot(xx,Pd_NBIC,'Color',rgbTriplet(3,:),'Marker','o');
 
 box on;
 xlabel('信噪比(dB)');
 ylabel('正确检测概率');
 axis([snr_min snr_max 0 1]);
 legend('AIC','MDL','NBIC','Location','southeast');
+
+% 保存图形并指定 DPI 为 600
+print('F:/研究生事项/毕业答辩/毕业论文/论文图片/第三章白噪声下实验不同信噪比.png', '-dpng', '-r600');
 % toc;

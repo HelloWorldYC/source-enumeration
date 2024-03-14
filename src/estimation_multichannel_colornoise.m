@@ -1,4 +1,4 @@
-%% 多通道色噪声下估计
+%% 多�?�道色噪声下估计
 clear;
 clc;
 tic;
@@ -10,21 +10,21 @@ fb = 2.2e4;
 Ns = 256;
 L=Ns;
 t=1:L;
-num=3; %信源数
+num=3; %信源�?
 
-Array_Num=8;% 阵元数
+Array_Num=8;% 阵元�?
 d=0.5; %线阵半径
 lamda=1; %波长
 kk=6;    %线阵
 M=Array_Num;
-% 入射角
+% 入射�?
 theta_jam1=10;
 theta_jam2=40;
 theta_jam3=70;
 theta_jam4=70;
 theta_jam5=88;
 degrad=pi/180;
-%方位角
+%方位�?
 alfa_jam1=10;
 alfa_jam2=50;
 alfa_jam3=90;
@@ -36,11 +36,11 @@ s_jam2=array_form(Array_Num,d,lamda,theta_jam2,alfa_jam2,kk);
 s_jam3=array_form(Array_Num,d,lamda,theta_jam3,alfa_jam3,kk);
 s_jam4=array_form(Array_Num,d,lamda,theta_jam4,alfa_jam4,kk);
 s_jam5=array_form(Array_Num,d,lamda,theta_jam5,alfa_jam5,kk);
-A=[s_jam1;s_jam2;s_jam3];%方向矩阵；
+A=[s_jam1;s_jam2;s_jam3];%方向矩阵�?
 % A=[s_jam1];
 A=A';
 
-% 构造低通滤波器
+% 构�?�低通滤波器
 Wp=2*pi*30;
 Ws=2*pi*40;
 Rp=0.5;
@@ -58,7 +58,7 @@ snr_length = snr_max-snr_min+1;
 Pd_GDE=zeros(1,snr_length);
 Pd_AIC=zeros(1,snr_length);
 Pd_MDL=zeros(1,snr_length);
-Pd_IBIC=zeros(1,snr_length);
+Pd_NBIC=zeros(1,snr_length);
 Pd_MIC=zeros(1,snr_length);
 Pd_MSTDC=zeros(1,snr_length);
 Pd_ISSM=zeros(1,snr_length);
@@ -71,7 +71,7 @@ for SNR=snr_min:snr_max
     Ns_AIC=zeros(1,Nt);
     Ns_MDL=zeros(1,Nt);
     Ns_GDE=zeros(1,Nt);
-    Ns_IBIC=zeros(1,Nt);
+    Ns_NBIC=zeros(1,Nt);
     Ns_MIC=zeros(1,Nt);
     Ns_MSTDC=zeros(1,Nt);
     Ns_ISSM=zeros(1,Nt);
@@ -89,14 +89,14 @@ for cc=1:Nt
     signal=Am*x;
     A1=A*signal; 
     noise=randn(M,L);
-    color_noise=filter(b,a,noise);        %滤波产生高斯色噪声
+    color_noise=filter(b,a,noise);        %滤波产生高斯色噪�?
     X=A1+color_noise;
 %     X=awgn(A1,SNR,'measured');
-%     noise=randn(M,L); %白噪声模型
-%     % noise=randn(M,L); %白噪声模型
+%     noise=randn(M,L); %白噪声模�?
+%     % noise=randn(M,L); %白噪声模�?
 %     X=A1+noise;
 
-    R=X*X'/L; %信号协方差
+    R=X*X'/L; %信号协方�?
 
     [u,v]=svd(R);
     T=diag(v);
@@ -104,7 +104,7 @@ for cc=1:Nt
     [AIC,Ns_AIC(cc)] = func_AIC(M,L,T);
     [MDL,Ns_MDL(cc)] = func_MDL(M,L,T);
     [GDE,Ns_GDE(cc)] = func_GDE(M,L,R);
-    [IBIC,Ns_IBIC(cc)] = func_IBIC(1/(M*L),M,L,R);
+    [IBIC,Ns_NBIC(cc)] = func_NBIC(1/(M*L),M,L,R);
     [MIC,Ns_MIC(cc)] = func_MIC(X,M,L);
     [MSTDC,Ns_MSTDC(cc)] = func_MSTDC(X,M,L);
     [ISSM,Ns_ISSM(cc)]=func_ISSM(X);
@@ -115,7 +115,7 @@ end
 Pd_GDE(jj)=length(find(Ns_GDE==num))./Nt;
 Pd_MDL(jj)=length(find(Ns_MDL==num))./Nt;
 Pd_AIC(jj)=length(find(Ns_AIC==num))./Nt;
-Pd_IBIC(jj)=length(find(Ns_IBIC==num))./Nt;
+Pd_NBIC(jj)=length(find(Ns_NBIC==num))./Nt;
 Pd_MIC(jj)=length(find(Ns_MIC==num))./Nt;
 Pd_MSTDC(jj)=length(find(Ns_MSTDC==num))./Nt;
 Pd_ISSM(jj)=length(find(Ns_ISSM==num))./Nt;
@@ -124,11 +124,11 @@ Pd_LDFCM(jj)=length(find(Ns_LDFCM==num))./Nt;
 end
  %%
 xx=snr_min:snr_max;
-plot(xx,Pd_GDE,'o-',xx,Pd_IBIC,'b^-',xx,Pd_MIC,'gs-',xx,Pd_ISSM,'>-',xx,Pd_LDFCM,'bs-');
+plot(xx,Pd_GDE,'o-',xx,Pd_NBIC,'b^-',xx,Pd_MIC,'gs-',xx,Pd_ISSM,'>-',xx,Pd_LDFCM,'bs-');
 % plot(xx,Pd_AIC,'>-',xx,Pd_MDL,'rs-',xx,Pd_GDE,'o-',xx,Pd_BIC,'b^-',xx,Pd_MIC,'c*-',xx,Pd_MSTDC,'r*-');
-title(['色噪声下',num2str(Array_Num),'线阵估计',num2str(num),'个信源']);
-xlabel('不同信噪比（dB）');
-ylabel('正确检测概率(%)');
+title(['色噪声下',num2str(Array_Num),'线阵估计',num2str(num),'个信�?']);
+xlabel('不同信噪比（dB�?');
+ylabel('正确�?测概�?(%)');
 axis([snr_min snr_max 0 1]);
-legend('GDE','IBIC','MIC','ISSM','LDFCM');
+legend('GDE','NBIC','MIC','ISSM','LDFCM');
 toc;

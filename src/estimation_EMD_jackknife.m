@@ -104,7 +104,7 @@ for cc=1:Nt
         [AIC,frequency_AIC(k)] = func_AIC(M,L1,T1);
         [MDL,frequency_MDL(k)] = func_MDL(M,L1,T1);
         [GDE,frequency_GDE(k)] = func_GDE(M,L1,R);
-        [BIC,frequency_BIC(k)] = func_BIC(1/(M*L1),M,L1,R);
+        [BIC,frequency_BIC(k)] = func_NBIC(1/(M*L1),M,L1,R);
         [MIC,frequency_MIC(k)] = func_MIC(resignal,M,L1);
         [MSTDC,frequency_MSTDC(k)] = func_MSTDC(resignal,M,L1);
     end

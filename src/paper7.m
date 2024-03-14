@@ -1,7 +1,7 @@
 %% 论文第三章色噪声下不同信源数实验
 clear;
 clc;
-tic;
+% tic;
 
 f0 = 15.48e4;
 fs = 62e4;
@@ -46,7 +46,7 @@ num_length = length(num_circle);
 Pd_GDE=zeros(1,num_length);
 Pd_RAIC=zeros(1,num_length);
 Pd_RMDL=zeros(1,num_length);
-Pd_RIBIC=zeros(1,num_length);
+Pd_RNBIC=zeros(1,num_length);
 Pd_ISSM=zeros(1,num_length);
 
 for num=num_circle
@@ -57,7 +57,7 @@ for num=num_circle
     Ns_RAIC=zeros(1,Nt);
     Ns_RMDL=zeros(1,Nt);
     Ns_GDE=zeros(1,Nt);
-    Ns_RIBIC=zeros(1,Nt);
+    Ns_RNBIC=zeros(1,Nt);
     Ns_ISSM=zeros(1,Nt);
 
 for cc=1:Nt
@@ -79,7 +79,7 @@ for cc=1:Nt
     [RAIC,Ns_RAIC(cc)] = func_AIC(M,L,T1);
     [RMDL,Ns_RMDL(cc)] = func_MDL(M,L,T1);
     [GDE,Ns_GDE(cc)] = func_GDE(M,L,R);
-    [RBIC,Ns_RIBIC(cc)] = func_RIBIC(1/(M*L),M,L,R);
+    [RNBIC,Ns_RNBIC(cc)] = func_RNBIC(1/(M*L),M,L,R);
     [ISSM,Ns_ISSM(cc)]=func_ISSM(X);
 
 end
@@ -87,10 +87,16 @@ end
 Pd_GDE(jj)=length(find(Ns_GDE==num))./Nt;
 Pd_RMDL(jj)=length(find(Ns_RMDL==num))./Nt;
 Pd_RAIC(jj)=length(find(Ns_RAIC==num))./Nt;
-Pd_RIBIC(jj)=length(find(Ns_RIBIC==num))./Nt;
+Pd_RNBIC(jj)=length(find(Ns_RNBIC==num))./Nt;
 Pd_ISSM(jj)=length(find(Ns_ISSM==num))./Nt;
 
 end
+
+%%
+savefilename = strcat('./detection_probability/paper7_colornoise_snr', num2str(snr), ...
+    '_snapshot',num2str(L),'_sources1to',num2str(num_max),'_sensors',num2str(Array_Num),'.mat');
+save(savefilename,'Pd_RAIC','Pd_RMDL','Pd_RNBIC','Pd_GDE','Pd_ISSM');
+
 %%
 rgbTriplet = 0.01*round(100*[062 043 109;...
     240 100 073;...
@@ -102,13 +108,17 @@ rgbTriplet = 0.01*round(100*[062 043 109;...
 hold on;
 plot(num_circle,Pd_RAIC,'Color',rgbTriplet(1,:),'Marker','*');
 plot(num_circle,Pd_RMDL,'Color',rgbTriplet(2,:),'Marker','p');
-plot(num_circle,Pd_RIBIC,'Color',rgbTriplet(3,:),'Marker','o');
+plot(num_circle,Pd_RNBIC,'Color',rgbTriplet(3,:),'Marker','o');
 plot(num_circle,Pd_GDE,'Color',rgbTriplet(4,:),'Marker','^');
 plot(num_circle,Pd_ISSM,'Color',rgbTriplet(5,:),'Marker','d');
 
 box on;
-xlabel('信号源数');
+xlabel('信源数');
 ylabel('正确检测概率');
 axis([min(num_circle) max(num_circle) 0 1]);
 legend('RAIC','RMDL','RNBIC','GDE','ISSM','Location','southwest');
-toc;
+
+
+% 保存图形并指定 DPI 为 600
+print('F:/研究生事项/毕业答辩/毕业论文/论文图片/第三章色噪声下实验不同信源数.png', '-dpng', '-r600');
+% toc;

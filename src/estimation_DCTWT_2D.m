@@ -63,7 +63,7 @@ for i =1:length(SNR)
         [AIC,Ns_AIC(mk)] = func_AIC(Mv,Lv,T1);
         [MDL,Ns_MDL(mk)] = func_MDL(Mv,Lv,T1);
         [GDE,Ns_GDE(mk)] = func_GDE(Mv,Lv,Rv);
-        [BIC,Ns_BIC(mk)] = func_BIC(1/(Mv*Lv),Mv,Lv,Rv);
+        [BIC,Ns_BIC(mk)] = func_NBIC(1/(Mv*Lv),Mv,Lv,Rv);
     end
     accuracy_SNR_GDE(i)=length(find(Ns_GDE(:)==num))./monte;
     accuracy_SNR_MDL(i)=length(find(Ns_MDL(:)==num))./monte;

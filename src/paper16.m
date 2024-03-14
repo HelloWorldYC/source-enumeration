@@ -60,14 +60,14 @@ A=A';
 end
 
 %%
-Nt=5000; %Monte次数
+Nt=2000; %Monte次数
 jj=0;
 SNR = 3;
 sensor_length = sensor_max-sensor_min + 1;
 Pd_GDE=zeros(1,sensor_length);
 Pd_RAIC=zeros(1,sensor_length);
 Pd_RMDL=zeros(1,sensor_length);
-Pd_RIBIC=zeros(1,sensor_length);
+Pd_RNBIC=zeros(1,sensor_length);
 Pd_ISSM=zeros(1,sensor_length);
 Pd_MSRSE=zeros(1,sensor_length);
 
@@ -91,7 +91,7 @@ for sensor=sensor_min:1:sensor_max
     Ns_RAIC=zeros(1,Nt);
     Ns_RMDL=zeros(1,Nt);
     Ns_GDE=zeros(1,Nt);
-    Ns_RIBIC=zeros(1,Nt);
+    Ns_RNBIC=zeros(1,Nt);
     Ns_ISSM=zeros(1,Nt);
     Ns_MSRSE=zeros(1,Nt);
 for cc=1:Nt
@@ -113,7 +113,7 @@ for cc=1:Nt
     [RAIC,Ns_RAIC(cc)] = func_AIC(sensor,L,T1);
     [RMDL,Ns_RMDL(cc)] = func_MDL(sensor,L,T1);
     [GDE,Ns_GDE(cc)] = func_GDE(sensor,L,R);
-    [RIBIC,Ns_RIBIC(cc)] = func_RIBIC(1/(sensor*L),sensor,L,R);
+    [RNBIC,Ns_RNBIC(cc)] = func_RNBIC(1/(sensor*L),sensor,L,R);
     [ISSM,Ns_ISSM(cc)]=func_ISSM(X);
     [MSRSE,Ns_MSRSE(cc)] = func_MSRSE(L,Dictionary_base,num_max,X,param.L);
 
@@ -122,11 +122,17 @@ end
 Pd_GDE(jj)=length(find(Ns_GDE==num))./Nt; 
 Pd_RMDL(jj)=length(find(Ns_RMDL==num))./Nt;
 Pd_RAIC(jj)=length(find(Ns_RAIC==num))./Nt;
-Pd_RIBIC(jj)=length(find(Ns_RIBIC==num))./Nt;
+Pd_RNBIC(jj)=length(find(Ns_RNBIC==num))./Nt;
 Pd_ISSM(jj)=length(find(Ns_ISSM==num))./Nt;
 Pd_MSRSE(jj)=length(find(Ns_MSRSE==num))./Nt;
 
 end
+
+%%
+savefilename = strcat('./detection_probability/paper16_colornoise_snr', num2str(SNR), ...
+    '_snapshot',num2str(L),'_sources',num2str(num),'_sensors',num2str(sensor_min),'to',num2str(sensor_max),'.mat');
+save(savefilename,'Pd_RAIC','Pd_RMDL','Pd_RNBIC','Pd_GDE','Pd_ISSM','Pd_MSRSE');
+
 %%
 rgbTriplet = 0.01*round(100*[062 043 109;...
     240 100 073;...
@@ -139,7 +145,7 @@ xx=sensor_min:1:sensor_max;
 hold on;
 plot(xx,Pd_RAIC,'Color',rgbTriplet(1,:),'Marker','*');
 plot(xx,Pd_RMDL,'Color',rgbTriplet(2,:),'Marker','p');
-plot(xx,Pd_RIBIC,'Color',rgbTriplet(3,:),'Marker','o');
+plot(xx,Pd_RNBIC,'Color',rgbTriplet(3,:),'Marker','o');
 plot(xx,Pd_GDE,'Color',rgbTriplet(4,:),'Marker','^');
 plot(xx,Pd_ISSM,'Color',rgbTriplet(5,:),'Marker','d');
 plot(xx,Pd_MSRSE,'Color',rgbTriplet(6,:),'Marker','s');
@@ -149,4 +155,7 @@ xlabel('阵元数');
 ylabel('正确检测概率');
 axis([sensor_min sensor_max 0 1]);
 legend('RAIC','RMDL','RNBIC','GDE','ISSM','本文算法','Location','southeast');
+
+% 保存图形并指定 DPI 为 600
+print('F:/研究生事项/毕业答辩/毕业论文/论文图片/第五章色噪声下实验不同阵元数.png', '-dpng', '-r600');
 % toc;

@@ -1,7 +1,7 @@
 %% 论文第三章色噪声下不同快拍数实验
 clear;
 clc;
-tic;
+% tic;
 
 f0 = 15.48e4;
 fs = 62e4;
@@ -43,12 +43,14 @@ Nt=5000; %Monte次数
 jj=0;
 snr = 4;
 Am=10^(snr/10);
-L_circle = 30:10:300;
+L_circle_min = 30;
+L_circle_max = 300;
+L_circle = L_circle_min:10:L_circle_max;
 L_length = length(L_circle);
 Pd_GDE=zeros(1,L_length);
 Pd_RAIC=zeros(1,L_length);
 Pd_RMDL=zeros(1,L_length);
-Pd_RIBIC=zeros(1,L_length);
+Pd_RNBIC=zeros(1,L_length);
 Pd_ISSM=zeros(1,L_length);
 for L=L_circle
     disp(['L is ',num2str(L)]);
@@ -56,7 +58,7 @@ for L=L_circle
     Ns_RAIC=zeros(1,Nt);
     Ns_RMDL=zeros(1,Nt);
     Ns_GDE=zeros(1,Nt);
-    Ns_RIBIC=zeros(1,Nt);
+    Ns_RNBIC=zeros(1,Nt);
     Ns_ISSM=zeros(1,Nt);
 for cc=1:Nt
     x1 = zeros(num,L);
@@ -77,7 +79,7 @@ for cc=1:Nt
     [RAIC,Ns_RAIC(cc)] = func_AIC(M,L,T1);
     [RMDL,Ns_RMDL(cc)] = func_MDL(M,L,T1);
     [GDE,Ns_GDE(cc)] = func_GDE(M,L,R);
-    [RBIC,Ns_RIBIC(cc)] = func_RIBIC(1/(M*L),M,L,R);
+    [RNBIC,Ns_RNBIC(cc)] = func_RNBIC(1/(M*L),M,L,R);
     [ISSM,Ns_ISSM(cc)]=func_ISSM(X);
 
 end
@@ -85,10 +87,16 @@ end
 Pd_GDE(jj)=length(find(Ns_GDE==num))./Nt;
 Pd_RMDL(jj)=length(find(Ns_RMDL==num))./Nt;
 Pd_RAIC(jj)=length(find(Ns_RAIC==num))./Nt;
-Pd_RIBIC(jj)=length(find(Ns_RIBIC==num))./Nt;
+Pd_RNBIC(jj)=length(find(Ns_RNBIC==num))./Nt;
 Pd_ISSM(jj)=length(find(Ns_ISSM==num))./Nt;
 
 end
+
+%%
+savefilename = strcat('./detection_probability/paper6_colornoise_snr', num2str(snr), ...
+    '_snapshot',num2str(L_circle_min),'to',num2str(L_circle_max),'_sources',num2str(num),'_sensors',num2str(Array_Num),'.mat');
+save(savefilename,'Pd_RAIC','Pd_RMDL','Pd_RNBIC','Pd_GDE','Pd_ISSM');
+
  %%
 rgbTriplet = 0.01*round(100*[062 043 109;...
     240 100 073;...
@@ -100,7 +108,7 @@ rgbTriplet = 0.01*round(100*[062 043 109;...
 hold on;
 plot(L_circle,Pd_RAIC,'Color',rgbTriplet(1,:),'Marker','*');
 plot(L_circle,Pd_RMDL,'Color',rgbTriplet(2,:),'Marker','p');
-plot(L_circle,Pd_RIBIC,'Color',rgbTriplet(3,:),'Marker','o');
+plot(L_circle,Pd_RNBIC,'Color',rgbTriplet(3,:),'Marker','o');
 plot(L_circle,Pd_GDE,'Color',rgbTriplet(4,:),'Marker','^');
 plot(L_circle,Pd_ISSM,'Color',rgbTriplet(5,:),'Marker','d');
 
@@ -109,4 +117,8 @@ xlabel('快拍数');
 ylabel('正确检测概率');
 axis([min(L_circle) max(L_circle) 0 1]);
 legend('RAIC','RMDL','RNBIC','GDE','ISSM','Location','southeast');
-toc;
+
+
+% 保存图形并指定 DPI 为 600
+print('F:/研究生事项/毕业答辩/毕业论文/论文图片/第三章色噪声下实验不同快拍数.png', '-dpng', '-r600');
+% toc;

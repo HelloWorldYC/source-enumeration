@@ -1,4 +1,4 @@
-%% 利用稀疏矩阵生成字典，再估计
+%% 利用�?疏矩阵生成字典，再估�?
 clear;
 clc;
 tic;
@@ -10,29 +10,29 @@ fb = 2.2e4;
 Ns = 256;
 L=Ns;
 t=1:L;
-num = 3; %信源数
+num = 3; %信源�?
 
-Array_Num=8;% 阵元数
+Array_Num=8;% 阵元�?
 d=0.5; %线阵半径
 lamda=1; %波长
 kk=6;    %线阵
 M=Array_Num;
 num_max = 6;
-% 入射角
+% 入射�?
 theta_jam=10:15:num_max*20;
 degrad=pi/180;
-%方位角
+%方位�?
 alfa_jam=10:20:num_max*20;
 
 for i=1:num_max
 s_jam(i,:)=array_form(Array_Num,d,lamda,theta_jam(i),alfa_jam(i),kk);
 end
-% A=[s_jam(1,:);s_jam(2,:);s_jam(3,:)];%方向矩阵；
-A=[s_jam(1:num,:)];%方向矩阵；
+% A=[s_jam(1,:);s_jam(2,:);s_jam(3,:)];%方向矩阵�?
+A=[s_jam(1:num,:)];%方向矩阵�?
 % A=[s_jam1];
 A=A';
 
-% 稀疏表示参数
+% �?疏表示参�?
 param.L = 3;
 param.K = 45;
 param.numIteration = 50;
@@ -71,16 +71,16 @@ snr_max = 20;
 snr_length = snr_max-snr_min+1;
 
 Pd_GDE=zeros(1,snr_length);
-Pd_IBIC=zeros(1,snr_length);
+Pd_NBIC=zeros(1,snr_length);
 Pd_ISSM=zeros(1,snr_length);
 Pd_GDE_sparse=zeros(1,snr_length);
-Pd_IBIC_sparse=zeros(1,snr_length);
+Pd_NBIC_sparse=zeros(1,snr_length);
 Pd_ISSM_sparse=zeros(1,snr_length);
 Pd_GDE_difference=zeros(1,snr_length);
-Pd_IBIC_difference=zeros(1,snr_length);
+Pd_NBIC_difference=zeros(1,snr_length);
 Pd_ISSM_difference=zeros(1,snr_length);
 Pd_GDE_DU=zeros(1,snr_length);
-Pd_IBIC_DU=zeros(1,snr_length);
+Pd_NBIC_DU=zeros(1,snr_length);
 Pd_ISSM_DU=zeros(1,snr_length);
 Pd_mse=zeros(1,snr_length);
 Pd_mse_eigen=zeros(1,snr_length);
@@ -90,16 +90,16 @@ for SNR=snr_min:snr_max
     Am=10^(SNR/10);
     jj=jj+1;
     Ns_GDE=zeros(1,Nt);
-    Ns_IBIC=zeros(1,Nt);
+    Ns_NBIC=zeros(1,Nt);
     Ns_ISSM=zeros(1,Nt);
     Ns_GDE_sparse=zeros(1,Nt);
-    Ns_IBIC_sparse=zeros(1,Nt);
+    Ns_NBIC_sparse=zeros(1,Nt);
     Ns_ISSM_sparse=zeros(1,Nt);
     Ns_GDE_difference=zeros(1,Nt);
-    Ns_IBIC_difference=zeros(1,Nt);
+    Ns_NBIC_difference=zeros(1,Nt);
     Ns_ISSM_difference=zeros(1,Nt);
     Ns_GDE_DU=zeros(1,Nt);
-    Ns_IBIC_DU=zeros(1,Nt);
+    Ns_NBIC_DU=zeros(1,Nt);
     Ns_ISSM_DU=zeros(1,Nt);
     Ns_mse=zeros(1,Nt);
     Ns_mse_eigen=zeros(1,Nt);
@@ -113,10 +113,10 @@ parfor cc=1:Nt
     signal=Am*x1;
     A1=A*signal; 
     X=awgn(A1,SNR,'measured');
-    R=X*X'/L; %信号协方差
+    R=X*X'/L; %信号协方�?
     
     [GDE,Ns_GDE(cc)] = func_GDE(M,L,R);
-    [IBIC,Ns_IBIC(cc)] = func_IBIC(1/(M*L),M,L,R);
+    [NBIC,Ns_NBIC(cc)] = func_NBIC(1/(M*L),M,L,R);
     [ISSM,Ns_ISSM(cc)]=func_ISSM(X);
 %     
 %     [Dictionary,output] = KSVD(X,param);
@@ -192,7 +192,7 @@ parfor cc=1:Nt
 end
 
 Pd_GDE(jj)=length(find(Ns_GDE==num))./Nt;
-Pd_IBIC(jj)=length(find(Ns_IBIC==num))./Nt;
+Pd_NBIC(jj)=length(find(Ns_NBIC==num))./Nt;
 Pd_ISSM(jj)=length(find(Ns_ISSM==num))./Nt;
 
 % Pd_GDE_sparse(jj)=length(find(Ns_GDE_sparse==num))./Nt;
@@ -214,34 +214,34 @@ end
  %%
 xx=snr_min:snr_max;
 figure;
-plot(xx,Pd_GDE,'>-',xx,Pd_IBIC,'rs-',xx,Pd_ISSM,'b*-',xx,Pd_mse,'s-',xx,Pd_mse_eigen,'ro-',xx,Pd_Pu,'go-');
-title(['白噪声下',num2str(Array_Num),'线阵估计',num2str(num),'个信源']);
-xlabel('不同信噪比（dB）');
-ylabel('正确检测概率(%)');
+plot(xx,Pd_GDE,'>-',xx,Pd_NBIC,'rs-',xx,Pd_ISSM,'b*-',xx,Pd_mse,'s-',xx,Pd_mse_eigen,'ro-',xx,Pd_Pu,'go-');
+title(['白噪声下',num2str(Array_Num),'线阵估计',num2str(num),'个信�?']);
+xlabel('不同信噪比（dB�?');
+ylabel('正确�?测概�?(%)');
 axis([snr_min snr_max 0 1]);
-legend('GDE','IBIC','ISSM','mse','mse_eigen','Pu');
+legend('GDE','NBIC','ISSM','mse','mse_eigen','Pu');
 
 % figure;
 % plot(xx,Pd_GDE_sparse,'>-',xx,Pd_IBIC_sparse,'rs-',xx,Pd_ISSM_sparse,'b*-');
-% title(['白噪声下',num2str(Array_Num),'线阵估计',num2str(num),'个信源']);
-% xlabel('不同信噪比（dB）');
-% ylabel('正确检测概率(%)');
+% title(['白噪声下',num2str(Array_Num),'线阵估计',num2str(num),'个信�?']);
+% xlabel('不同信噪比（dB�?');
+% ylabel('正确�?测概�?(%)');
 % axis([snr_min snr_max 0 1]);
 % legend('GDEsparse','IBICsparse','ISSMsparse');
 % 
 % figure;
 % plot(xx,Pd_GDE_difference,'>-',xx,Pd_IBIC_difference,'rs-',xx,Pd_ISSM_difference,'b*-');
-% title(['白噪声下',num2str(Array_Num),'线阵估计',num2str(num),'个信源']);
-% xlabel('不同信噪比（dB）');
-% ylabel('正确检测概率(%)');
+% title(['白噪声下',num2str(Array_Num),'线阵估计',num2str(num),'个信�?']);
+% xlabel('不同信噪比（dB�?');
+% ylabel('正确�?测概�?(%)');
 % axis([snr_min snr_max 0 1]);
 % legend('GDEdiff','IBICdiff','ISSMdiff');
 % 
 % figure;
 % plot(xx,Pd_GDE_DU,'>-',xx,Pd_IBIC_DU,'rs-',xx,Pd_ISSM_DU,'b*-');
-% title(['白噪声下',num2str(Array_Num),'线阵估计',num2str(num),'个信源']);
-% xlabel('不同信噪比（dB）');
-% ylabel('正确检测概率(%)');
+% title(['白噪声下',num2str(Array_Num),'线阵估计',num2str(num),'个信�?']);
+% xlabel('不同信噪比（dB�?');
+% ylabel('正确�?测概�?(%)');
 % axis([snr_min snr_max 0 1]);
 % legend('GDEdu','IBICdu','ISSMdu');
 % toc;

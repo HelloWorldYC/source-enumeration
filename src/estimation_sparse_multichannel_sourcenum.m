@@ -60,7 +60,7 @@ num_length = length(num_circle);
 Pd_GDE=zeros(1,num_length);
 Pd_AIC=zeros(1,num_length);
 Pd_MDL=zeros(1,num_length);
-Pd_IBIC=zeros(1,num_length);
+Pd_NBIC=zeros(1,num_length);
 Pd_MIC=zeros(1,num_length);
 Pd_MSTDC=zeros(1,num_length);
 Pd_ISSM=zeros(1,num_length);
@@ -77,7 +77,7 @@ for num=num_circle
     Ns_AIC=zeros(1,Nt);
     Ns_MDL=zeros(1,Nt);
     Ns_GDE=zeros(1,Nt);
-    Ns_IBIC=zeros(1,Nt);
+    Ns_NBIC=zeros(1,Nt);
     Ns_MIC=zeros(1,Nt);
     Ns_MSTDC=zeros(1,Nt);
     Ns_ISSM=zeros(1,Nt);
@@ -106,7 +106,7 @@ parfor cc=1:Nt
     [AIC,Ns_AIC(cc)] = func_AIC(M,L,T);
     [MDL,Ns_MDL(cc)] = func_MDL(M,L,T);
     [GDE,Ns_GDE(cc)] = func_GDE(M,L,R);
-    [BIC,Ns_IBIC(cc)] = func_IBIC(1/(M*L),M,L,R);
+    [NBIC,Ns_NBIC(cc)] = func_NBIC(1/(M*L),M,L,R);
     [MIC,Ns_MIC(cc)] = func_MIC(X,M,L);
     [MSTDC,Ns_MSTDC(cc)] = func_MSTDC(X,M,L);
     [ISSM,Ns_ISSM(cc)]=func_ISSM(X);
@@ -128,7 +128,7 @@ end
 Pd_GDE(jj)=length(find(Ns_GDE==num))./Nt;
 Pd_MDL(jj)=length(find(Ns_MDL==num))./Nt;
 Pd_AIC(jj)=length(find(Ns_AIC==num))./Nt;
-Pd_IBIC(jj)=length(find(Ns_IBIC==num))./Nt;
+Pd_NBIC(jj)=length(find(Ns_NBIC==num))./Nt;
 Pd_MIC(jj)=length(find(Ns_MIC==num))./Nt;
 Pd_MSTDC(jj)=length(find(Ns_MSTDC==num))./Nt;
 Pd_ISSM(jj)=length(find(Ns_ISSM==num))./Nt;
@@ -144,7 +144,7 @@ end
 %  plot(num_circle,Pd_GDE,'>-',num_circle,Pd_MDL,'rs-',num_circle,Pd_AIC,'b*-',num_circle,Pd_IBIC,'r*-',num_circle,Pd_MIC,'o-',...
 %      num_circle,Pd_MSTDC,'b^-',num_circle,Pd_ISSM,'gs-',num_circle,Pd_LDFCM,'rv-',num_circle,Pd_MSRSE,'ms-');
 plot(num_circle,Pd_AIC,'g*-',num_circle,Pd_MDL,'bp-',num_circle,Pd_GDE,'m>-',...
-     num_circle,Pd_MSTDC,'go-',num_circle,Pd_IBIC,'b^-',num_circle,Pd_ISSM,'md-',num_circle,Pd_MSRSE,'rs-');
+     num_circle,Pd_MSTDC,'go-',num_circle,Pd_NBIC,'b^-',num_circle,Pd_ISSM,'md-',num_circle,Pd_MSRSE,'rs-');
 % plot(num_circle,Pd_GDE_sparse,'>-',num_circle,Pd_BIC_sparse,'rs-',num_circle,Pd_MIC_sparse,'r*-',num_circle,Pd_GDE,'o-',num_circle,Pd_BIC,'b^-',num_circle,Pd_MIC,'gs-');
 % title([num2str(Array_Num),'线阵估计不同个数信源']);
 xlabel('Number of Sources');

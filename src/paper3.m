@@ -1,7 +1,7 @@
 %% 论文第三章白噪声下不同信源数实验
 clear;
 clc;
-tic;
+% tic;
 
 f0 = 15.48e4;
 fs = 62e4;
@@ -45,7 +45,7 @@ num_circle = 1:1:num_max;
 num_length = length(num_circle);
 Pd_AIC=zeros(1,num_length);
 Pd_MDL=zeros(1,num_length);
-Pd_IBIC=zeros(1,num_length);
+Pd_NBIC=zeros(1,num_length);
 
 for num=num_circle
     A=s_jam(1:num,:);%方向矩阵；
@@ -54,7 +54,7 @@ for num=num_circle
     jj=jj+1;
     Ns_AIC=zeros(1,Nt);
     Ns_MDL=zeros(1,Nt);
-    Ns_IBIC=zeros(1,Nt);
+    Ns_NBIC=zeros(1,Nt);
     
 for cc=1:Nt
     x1 = zeros(num,L);
@@ -71,15 +71,21 @@ for cc=1:Nt
     T=diag(v);
     [AIC,Ns_AIC(cc)] = func_AIC(M,L,T);
     [MDL,Ns_MDL(cc)] = func_MDL(M,L,T);
-    [BIC,Ns_IBIC(cc)] = func_IBIC(1/(M*L),M,L,R);
+    [BIC,Ns_NBIC(cc)] = func_NBIC(1/(M*L),M,L,R);
 
 end
 
 Pd_AIC(jj)=length(find(Ns_AIC==num))./Nt;
 Pd_MDL(jj)=length(find(Ns_MDL==num))./Nt;
-Pd_IBIC(jj)=length(find(Ns_IBIC==num))./Nt;
+Pd_NBIC(jj)=length(find(Ns_NBIC==num))./Nt;
 
 end
+
+%%
+savefilename = strcat('./detection_probability/paper3_whitenoise_snr', num2str(snr), ...
+    '_snapshot',num2str(L),'_sources1to',num2str(num_max),'_sensors',num2str(Array_Num),'.mat');
+save(savefilename,'Pd_AIC','Pd_MDL','Pd_NBIC');
+
 %%
 rgbTriplet = 0.01*round(100*[062 043 109;...
     240 100 073;...
@@ -91,11 +97,14 @@ rgbTriplet = 0.01*round(100*[062 043 109;...
 hold on;
 plot(num_circle,Pd_AIC,'Color',rgbTriplet(1,:),'Marker','*');
 plot(num_circle,Pd_MDL,'Color',rgbTriplet(2,:),'Marker','p');
-plot(num_circle,Pd_IBIC,'Color',rgbTriplet(3,:),'Marker','o');
+plot(num_circle,Pd_NBIC,'Color',rgbTriplet(3,:),'Marker','o');
 
 box on;
-xlabel('信号源数');
+xlabel('信源数');
 ylabel('正确检测概率');
 axis([min(num_circle) max(num_circle) 0 1]);
 legend('AIC','MDL','NBIC','Location','southwest');
-toc;
+
+% 保存图形并指定 DPI 为 600
+print('F:/研究生事项/毕业答辩/毕业论文/论文图片/第三章白噪声下实验不同信源数.png', '-dpng', '-r600');
+% toc;

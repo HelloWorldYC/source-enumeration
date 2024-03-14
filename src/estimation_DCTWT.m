@@ -95,7 +95,7 @@ for level = 1:1:length(nlevel)
             [AIC,Ns_AIC(1,mk)] = func_AIC(M1,L,T1);
             [MDL,Ns_MDL(1,mk)] = func_MDL(M1,L,T1);
             [GDE,Ns_GDE(1,mk)] = func_GDE(M1,L,R1);
-            [BIC,Ns_BIC(1,mk)] = func_IBIC(1/(M1*L),M1,L,R1);
+            [BIC,Ns_BIC(1,mk)] = func_NBIC(1/(M1*L),M1,L,R1);
            %% EMD·Ö½â
             emd_num = 8;
             Y2 = emd(X,'MaxNumIMF',emd_num);
