@@ -62,7 +62,7 @@ end
 %%
 Nt=2000; %Monte次数
 jj=0;
-SNR = 3;
+SNR = -5;
 sensor_length = sensor_max-sensor_min + 1;
 Pd_GDE=zeros(1,sensor_length);
 Pd_RAIC=zeros(1,sensor_length);
@@ -73,7 +73,7 @@ Pd_MSRSE=zeros(1,sensor_length);
 
 coef = cell(1,num_max);
 for sensor=sensor_min:1:sensor_max
-    filename = strcat('./dictionaries/colored/dictionary_colored_sensor_', num2str(Array_Num), '.mat');
+    filename = strcat('./dictionaries/colored/dictionary_colored_sensor_', num2str(sensor), '.mat');
     Dictionary_base = load(filename);
     Dictionary_base = Dictionary_base.Dictionary_base;
     disp(['ArrayNum is ',num2str(sensor)]);
@@ -101,7 +101,7 @@ for cc=1:Nt
     end
     signal=Am*x1;
     A1=A*signal; 
-    noise=randn(M,L);
+    noise=randn(sensor,L);
     color_noise=filter(b,a,noise);        %滤波产生高斯色噪声
     X=A1+color_noise;
 
@@ -151,11 +151,12 @@ plot(xx,Pd_ISSM,'Color',rgbTriplet(5,:),'Marker','d');
 plot(xx,Pd_MSRSE,'Color',rgbTriplet(6,:),'Marker','s');
 
 box on;
+grid on;
 xlabel('阵元数');
 ylabel('正确检测概率');
 axis([sensor_min sensor_max 0 1]);
 legend('RAIC','RMDL','RNBIC','GDE','ISSM','本文算法','Location','southeast');
 
 % 保存图形并指定 DPI 为 600
-print('F:/研究生事项/毕业答辩/毕业论文/论文图片/第五章色噪声下实验不同阵元数.png', '-dpng', '-r600');
+% print('F:/研究生事项/毕业答辩/毕业论文/论文图片/第五章色噪声下实验不同阵元数.png', '-dpng', '-r600');
 % toc;

@@ -39,7 +39,7 @@ W=2*pi*fs1;
 [N1,Wn]=buttord(2*Wp/W,2*Ws/W,Rp,Rs);
 [b,a]=butter(N1,Wn);
 
-Nt=5000; %Monte次数
+Nt=2000; %Monte次数
 jj=0;
 snr = 4;
 Am=10^(snr/10);
@@ -113,6 +113,7 @@ plot(L_circle,Pd_GDE,'Color',rgbTriplet(4,:),'Marker','^');
 plot(L_circle,Pd_ISSM,'Color',rgbTriplet(5,:),'Marker','d');
 
 box on;
+grid on;
 xlabel('快拍数');
 ylabel('正确检测概率');
 axis([min(L_circle) max(L_circle) 0 1]);

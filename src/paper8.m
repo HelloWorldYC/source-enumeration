@@ -49,7 +49,7 @@ A=A';
 end
 
 %%
-Nt=5000; %Monte次数
+Nt=2000; %Monte次数
 jj=0;
 SNR = 0;
 sensor_length = sensor_max-sensor_min + 1;
@@ -135,6 +135,7 @@ plot(xx,Pd_GDE,'Color',rgbTriplet(4,:),'Marker','^');
 plot(xx,Pd_ISSM,'Color',rgbTriplet(5,:),'Marker','d');
 
 box on;
+grid on;
 xlabel('阵元数');
 ylabel('正确检测概率');
 axis([sensor_min sensor_max 0 1]);

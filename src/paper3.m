@@ -37,7 +37,7 @@ W=2*pi*fs1;
 [N1,Wn]=buttord(2*Wp/W,2*Ws/W,Rp,Rs);
 [b,a]=butter(N1,Wn);
 
-Nt=5000; %Monte次数
+Nt=2000; %Monte次数
 jj=0;
 snr = 10;
 Am=10^(snr/10);
@@ -100,6 +100,7 @@ plot(num_circle,Pd_MDL,'Color',rgbTriplet(2,:),'Marker','p');
 plot(num_circle,Pd_NBIC,'Color',rgbTriplet(3,:),'Marker','o');
 
 box on;
+grid on;
 xlabel('信源数');
 ylabel('正确检测概率');
 axis([min(num_circle) max(num_circle) 0 1]);

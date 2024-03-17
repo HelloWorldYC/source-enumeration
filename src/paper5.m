@@ -42,7 +42,7 @@ W=2*pi*fs1;
 [N1,Wn]=buttord(2*Wp/W,2*Ws/W,Rp,Rs);
 [b,a]=butter(N1,Wn);
 
-Nt=5000; %Monte次数
+Nt=2000; %Monte次数
 jj=0;
 snr_min = -20;
 snr_max = 20;
@@ -116,6 +116,7 @@ plot(xx,Pd_GDE,'Color',rgbTriplet(4,:),'Marker','^');
 plot(xx,Pd_ISSM,'Color',rgbTriplet(5,:),'Marker','d');
 
 box on;
+grid on;
 xlabel('信噪比(dB)');
 ylabel('正确检测概率');
 axis([snr_min snr_max 0 1]);

@@ -41,8 +41,9 @@ param.displayProgress = 0;
 
 % L_train = 256; 
 % [Dictionary_base] = construct_multidictionary(fs,L_train,fa,fb,f0,param,num_max,s_jam);
-filename = strcat('./dictionaries/white/dictionary_white_sensor_', num2str(Array_Num), '.mat');
-Dictionary_base = load(filename);
+% filename = strcat('./dictionaries/white/dictionary_white_sensor_', num2str(Array_Num), '.mat');
+filename = strcat('dictionary_white.mat');
+Dictionary_base = load(filename);  
 Dictionary_base = Dictionary_base.Dictionary_base;
 %%
 % 构造低通滤波器
@@ -131,6 +132,7 @@ plot(L_circle,Pd_ISSM,'Color',rgbTriplet(5,:),'Marker','d');
 plot(L_circle,Pd_MSRSE,'Color',rgbTriplet(6,:),'Marker','s');
 
 box on;
+grid on;
 xlabel('快拍数');
 ylabel('正确检测概率');
 axis([min(L_circle) max(L_circle) 0 1]);

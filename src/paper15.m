@@ -38,7 +38,8 @@ param.InitializationMethod = 'DataElements';
 param.displayProgress = 0;
 
 % [Dictionary_base] = construct_multidictionary(fs,L,fa,fb,f0,param,num_max,s_jam);
-filename = strcat('./dictionaries/colored/dictionary_colored_sensor_', num2str(Array_Num), '.mat');
+% filename = strcat('./dictionaries/colored/dictionary_colored_sensor_', num2str(Array_Num), '.mat');
+filename = strcat('dictionary_color.mat');
 Dictionary_base = load(filename);
 Dictionary_base = Dictionary_base.Dictionary_base;
 %%
@@ -132,6 +133,7 @@ plot(num_circle,Pd_ISSM,'Color',rgbTriplet(5,:),'Marker','d');
 plot(num_circle,Pd_MSRSE,'Color',rgbTriplet(6,:),'Marker','s');
 
 box on;
+grid on;
 xlabel('信源数');
 ylabel('正确检测概率');
 axis([min(num_circle) max(num_circle) 0 1]);

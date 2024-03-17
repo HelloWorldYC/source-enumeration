@@ -62,7 +62,7 @@ end
 %%
 Nt=2000; %Monte次数
 jj=0;
-SNR = 3;
+SNR = -4;
 sensor_length = sensor_max-sensor_min + 1;
 Pd_GDE=zeros(1,sensor_length);
 Pd_AIC=zeros(1,sensor_length);
@@ -148,6 +148,7 @@ plot(xx,Pd_ISSM,'Color',rgbTriplet(5,:),'Marker','d');
 plot(xx,Pd_MSRSE,'Color',rgbTriplet(6,:),'Marker','s');
 
 box on;
+grid on;
 xlabel('阵元数');
 ylabel('正确检测概率');
 axis([sensor_min sensor_max 0 1]);

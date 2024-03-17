@@ -32,7 +32,7 @@ A=s_jam(1:num,:);%方向矩阵；
 A=A';
 
 %%
-Nt=5000; %Monte次数
+Nt=2000; %Monte次数
 jj=0;
 snr_min = -20;
 snr_max = 20;
@@ -100,6 +100,7 @@ plot(xx,Pd_MDL,'Color',rgbTriplet(2,:),'Marker','p');
 plot(xx,Pd_NBIC,'Color',rgbTriplet(3,:),'Marker','o');
 
 box on;
+grid on;
 xlabel('信噪比(dB)');
 ylabel('正确检测概率');
 axis([snr_min snr_max 0 1]);
