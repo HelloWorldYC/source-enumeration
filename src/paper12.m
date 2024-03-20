@@ -10,7 +10,7 @@ fb = 2.2e4;
 Ns = 256;
 L=Ns;
 t=1:L;
-num=4; %信源数
+num=5; %信源数
 
 % 构造低通滤波器
 Wp=2*pi*30;
@@ -155,5 +155,6 @@ axis([sensor_min sensor_max 0 1]);
 legend('AIC','MDL','NBIC','GDE','ISSM','本文算法','Location','southeast');
 
 % 保存图形并指定 DPI 为 600
-print('F:/研究生事项/毕业答辩/毕业论文/论文图片/第五章白噪声下实验不同阵元数.png', '-dpng', '-r600');
+savefigname = strcat('F:/研究生事项/毕业答辩/毕业论文/论文图片/第五章白噪声下实验不同阵元数_',num2str(num),'信源.png');
+print(savefigname, '-dpng', '-r600');
 % toc;

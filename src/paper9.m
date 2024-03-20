@@ -10,7 +10,7 @@ fb = 2.2e4;
 Ns = 256;
 L=Ns;
 t=1:L;
-num=4; %信源数
+num=5; %信源数
 
 Array_Num=8;% 阵元数
 d=0.5; %线阵半径
@@ -43,8 +43,8 @@ param.InitializationMethod = 'DataElements';
 param.displayProgress = 0;
 
 % [Dictionary_base] = construct_multidictionary(fs,L,fa,fb,f0,param,num_max,s_jam);
-% filename = strcat('./dictionaries/white/dictionary_white_sensor_', num2str(Array_Num), '.mat');
-filename = strcat('dictionary_white.mat');
+filename = strcat('./dictionaries/white/dictionary_white_sensor_', num2str(Array_Num), '.mat');
+% filename = strcat('dictionary_white.mat');
 Dictionary_base = load(filename);
 Dictionary_base = Dictionary_base.Dictionary_base;
 %%
@@ -142,5 +142,6 @@ legend('AIC','MDL','NBIC','GDE','ISSM','本文算法','Location','southeast');
 
 
 % 保存图形并指定 DPI 为 600
-print('F:/研究生事项/毕业答辩/毕业论文/论文图片/第五章白噪声下实验不同信噪比.png', '-dpng', '-r600');
+savefigname = strcat('F:/研究生事项/毕业答辩/毕业论文/论文图片/第五章白噪声下实验不同信噪比_',num2str(num),'信源.png');
+print(savefigname, '-dpng', '-r600');
 % toc;

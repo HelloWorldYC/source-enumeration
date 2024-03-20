@@ -7,7 +7,7 @@ f0 = 15.48e4;
 fs = 62e4;
 fa = 2.3e4;
 fb = 2.2e4;
-num=4; %信源数
+num=5; %信源数
 
 Array_Num=8;% 阵元数
 d=0.5; %线阵半径
@@ -56,9 +56,9 @@ W=2*pi*fs1;
 [N1,Wn]=buttord(2*Wp/W,2*Ws/W,Rp,Rs);
 [b,a]=butter(N1,Wn);
 
-Nt=2000; %Monte次数
+Nt=2000; % Monte次数
 jj=0;
-snr = 0;
+snr = 5;
 Am=10^(snr/10);
 L_circle_min = 30;
 L_circle_max = 300;
@@ -139,5 +139,6 @@ axis([min(L_circle) max(L_circle) 0 1]);
 legend('AIC','MDL','NBIC','GDE','ISSM','本文算法','Location','southeast');
 
 % 保存图形并指定 DPI 为 600
-print('F:/研究生事项/毕业答辩/毕业论文/论文图片/第五章白噪声下实验不同快拍数.png', '-dpng', '-r600');
+savefigname = strcat('F:/研究生事项/毕业答辩/毕业论文/论文图片/第五章白噪声下实验不同快拍数_',num2str(num),'信源.png');
+print(savefigname, '-dpng', '-r600');
 % toc;

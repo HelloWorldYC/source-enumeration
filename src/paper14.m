@@ -7,7 +7,7 @@ f0 = 15.48e4;
 fs = 62e4;
 fa = 2.3e4;
 fb = 2.2e4;
-num=4; %信源数
+num=5; %信源数
 
 Array_Num=8;% 阵元数
 d=0.5; %线阵半径
@@ -42,8 +42,8 @@ param.displayProgress = 0;
 % L_train = 256; 
 % [Dictionary_base] = construct_multidictionary(fs,L_train,fa,fb,f0,param,num_max,s_jam);
 % filename = strcat('./dictionaries/colored/dictionary_colored_sensor_', num2str(Array_Num), '.mat');
-filename = strcat('./dictionaries/different_sensors/dictionary_colored_sensor_', num2str(Array_Num), '.mat');
-% filename = strcat('dictionary_color.mat');
+% filename = strcat('./dictionaries/different_sensors/dictionary_colored_sensor_', num2str(Array_Num), '.mat');
+filename = strcat('dictionary_color.mat');
 Dictionary_base = load(filename);
 Dictionary_base = Dictionary_base.Dictionary_base;
 %%
@@ -143,5 +143,6 @@ axis([min(L_circle) max(L_circle) 0 1]);
 legend('RAIC','RMDL','RNBIC','GDE','ISSM','本文算法','Location','southeast');
 
 % 保存图形并指定 DPI 为 600
-print('F:/研究生事项/毕业答辩/毕业论文/论文图片/第五章色噪声下实验不同快拍数.png', '-dpng', '-r600');
+savefigname = strcat('F:/研究生事项/毕业答辩/毕业论文/论文图片/第五章色噪声下实验不同快拍数_',num2str(num),'信源.png');
+print(savefigname, '-dpng', '-r600');
 % toc;
