@@ -1,15 +1,15 @@
-%% è®ºæ–‡å¤ç°
-% è®ºæ–‡ï¼šA Source Number Estimation Algorithm Based on Data Local Density and Fuzzy C-Means Clustering
+%% ÂÛÎÄ¸´ÏÖ
+% ÂÛÎÄ£ºA Source Number Estimation Algorithm Based on Data Local Density and Fuzzy C-Means Clustering
 % 
 %%
 function [Ns_LDFCM]=func_LDFCM(R)
 
 % L=100;
-% num=3; %ä¿¡æºæ•°
-% Array_Num=10;% é˜µå…ƒæ•°
-% d=0.5; %çº¿é˜µåŠå¾„
-% lamda=1; %æ³¢é•¿
-% kk=6;    %çº¿é˜µ
+% num=3; %ĞÅÔ´Êı
+% Array_Num=10;% ÕóÔªÊı
+% d=0.5; %ÏßÕó°ë¾¶
+% lamda=1; %²¨³¤
+% kk=6;    %ÏßÕó
 % M=Array_Num;
 % theta_jam1=10;
 % theta_jam2=40;
@@ -20,7 +20,7 @@ function [Ns_LDFCM]=func_LDFCM(R)
 % s_jam1=array_form(Array_Num,d,lamda,theta_jam1,alfa_jam1,kk);
 % s_jam2=array_form(Array_Num,d,lamda,theta_jam2,alfa_jam2,kk);
 % s_jam3=array_form(Array_Num,d,lamda,theta_jam3,alfa_jam3,kk);
-% A=[s_jam1;s_jam2;s_jam3];%æ–¹å‘çŸ©é˜µï¼›
+% A=[s_jam1;s_jam2;s_jam3];%·½Ïò¾ØÕó£»
 % A=A';
 % snr=-3;
 % Am=10^(snr/10);

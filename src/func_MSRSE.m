@@ -1,7 +1,7 @@
-%% åˆ©ç”¨ç¨€ç–é‡æž„å‰åŽçš„å¥‡å¼‚å€¼è¯¯å·®æ¥åšä¼°è®¡
-% ç çŒ¿: é©¬å¶æ¤¿
-% æ¥æºï¼šåŽŸåˆ›
-% ç‰ˆæœ¬ï¼šv1.0-2022.06.26
+%% ÀûÓÃÏ¡ÊèÖØ¹¹Ç°ºóµÄÆæÒìÖµÎó²îÀ´×ö¹À¼Æ
+% ÂëÔ³: ÂíÒ¶´»
+% À´Ô´£ºÔ­´´
+% °æ±¾£ºv1.0-2022.06.26
 
 %% 
 function [MSRSE,Ns_MSRSE] = func_MSRSE(L,Dictionary_base,num_max,X,paramL)

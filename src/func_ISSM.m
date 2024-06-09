@@ -1,7 +1,7 @@
 %% ISSM
-% ç çŒ¿: é©¬å¶æ¤¿
-% è®ºæ–‡ï¼šDetection of the Number of Signals in Uniform Arrays by Invariants-Signal-Subspace Matchingï¼ˆ2022ï¼‰
-% ç‰ˆæœ¬ï¼šv1.0-2022.06.08
+% ÂëÔ³: ÂíÒ¶´»
+% ÂÛÎÄ£ºDetection of the Number of Signals in Uniform Arrays by Invariants-Signal-Subspace Matching£¨2022£©
+% °æ±¾£ºv1.0-2022.06.08
 
 %%
 function [ISSM,Ns_ISSM]=func_ISSM(Y)
@@ -12,7 +12,7 @@ ISSM = zeros(1,M-2);
 % Y2 = Y(2:M,:);
 R = Y*Y'/L;
 
-% ç¬¬ä¸€å¯¹å­é˜µåˆ—
+% µÚÒ»¶Ô×ÓÕóÁĞ
 R1 = R(1:M-1,:);
 R2 = R(2:M,:);
 % R1 = Y1*Y1'/L;
@@ -22,7 +22,7 @@ R2 = R(2:M,:);
 % ISSM(1) = 2-(2*(U1(:,1)'*U2(:,1))^2)/((norm(U1(:,1),2))^2*(norm(U2(:,1),2))^2);
 % I = eye(M-1);
 
-% ç¬¬äºŒå¯¹å­é˜µåˆ—
+% µÚ¶ş¶Ô×ÓÕóÁĞ
 R3 = R(1:M-2,:);
 R4 = R(3:M,:);
 [U3,~,~] = svd(R3);

@@ -1,4 +1,4 @@
-%% 淇″彿棰戣氨鍒嗘瀽
+%% 信号频谱分析
 
 clear;
 clc;
@@ -36,7 +36,7 @@ plot(abs(fft(x3)));
 figure;
 hist(x3,N);
 
-% % 璁捐甯﹂�氭护娉㈠櫒
+% % 设计带通滤波器
 fp1=[];
 mu = 0;
 sigma = 5;
@@ -63,8 +63,11 @@ plot(abs(X6));
 figure;
 plot(x6);
 
-fa = 3400;
-fb = 3400;
+f0 = 15.48e4;
+fs = 62e4;
+fa = 2.3e4;
+fb = 2.2e4;
+N = 256;
 [t,at,bt,x7]=narrow_signal(fs,N,fa,fb,f0);
 X7 = fftshift(fft(x7));
 figure;

@@ -58,7 +58,7 @@ W=2*pi*fs1;
 [N1,Wn]=buttord(2*Wp/W,2*Ws/W,Rp,Rs);
 [b,a]=butter(N1,Wn);
 
-Nt=2000; %Monte次数
+Nt=100; %Monte次数
 jj=0;
 snr_min = -20;
 snr_max = 20;

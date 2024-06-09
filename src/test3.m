@@ -1,7 +1,6 @@
-%% 论文第三章白噪声下不同信噪比实验
+%% 尝试用稀疏表示增强现有信源数估计算法
 clear;
 clc;
-% tic;
 
 f0 = 15.48e4;
 fs = 62e4;
@@ -31,27 +30,49 @@ end
 A=s_jam(1:num,:);%方向矩阵；
 A=A';
 
+% 稀疏表示参数
+param.L = 3;
+param.K = 45;
+param.numIteration = 50;
+param.errorFlag = 1;
+param.errorGoal = 1e-6;
+param.preserveDCAtom = 0;
+% Dictionary = randn(L,param.K);
+param.InitializationMethod = 'DataElements';
+param.displayProgress = 0;
+
+% [Dictionary_base] = construct_multidictionary(fs,L,fa,fb,f0,param,num_max,s_jam);
+filename = strcat('./dictionaries/white/dictionary_white_sensor_', num2str(Array_Num), '.mat');
+% filename = strcat('dictionary_white.mat');
+Dictionary_base = load(filename);
+Dictionary_base = Dictionary_base.Dictionary_base;
+
 %%
-Nt=2000; %Monte次数
+Nt=10; %Monte次数
 jj=0;
 snr_min = -20;
 snr_max = 20;
 snr_length = snr_max-snr_min+1;
 Pd_AIC=zeros(1,snr_length);
 Pd_MDL=zeros(1,snr_length);
+Pd_MDL_sparse=zeros(1,snr_length);
 Pd_NBIC=zeros(1,snr_length);
 Pd_GDE=zeros(1,snr_length);
 Pd_ISSM=zeros(1,snr_length);
-coef = cell(1,num_max);
+Pd_ISSM_sparse=zeros(1,snr_length);
+Pd_NBIC_sparse=zeros(1,snr_length);
 for SNR=snr_min:snr_max 
     disp(['SNR is ',num2str(SNR)]);
     Am=10^(SNR/10);
     jj=jj+1;
     Ns_AIC=zeros(1,Nt);
     Ns_MDL=zeros(1,Nt);
+    Ns_MDL_sparse=zeros(1,Nt);
     Ns_NBIC=zeros(1,Nt);
     Ns_GDE=zeros(1,Nt);
     Ns_ISSM=zeros(1,Nt);
+    Ns_NBIC_sparse=zeros(1, Nt);
+    Ns_ISSM_sparse=zeros(1, Nt);
 for cc=1:Nt
     x1 = zeros(num,L);
     for i=1:num
@@ -62,7 +83,6 @@ for cc=1:Nt
     X=awgn(A1,SNR,'measured');
 
     R=X*X'/L; %信号协方差
-
     [u,v]=svd(R);
     T=diag(v);
     [AIC,Ns_AIC(cc)] = func_AIC(M,L,T);
@@ -70,27 +90,27 @@ for cc=1:Nt
     [NBIC,Ns_NBIC(cc)] = func_NBIC(1/(M*L),M,L,R);
     [GDE,Ns_GDE(cc)] = func_GDE(M,L,R);
     [ISSM,Ns_ISSM(cc)]=func_ISSM(X);
+    coef = OMP(Dictionary_base{num},X,param.L);
+    coef = full(coef);
+    resignal = Dictionary_base{num}*coef;
+    reR = resignal*resignal'/L;
+    [uRe,vRe]=svd(reR);
+    TRe=diag(vRe);
+    reR=resignal*resignal'/L; 
+    [~,Ns_MDL_sparse(cc)] = func_MDL(M,L,TRe);
+    [~, Ns_NBIC_sparse(cc)]=func_NBIC(1/(M*L),M,L,reR);
+    [~,Ns_ISSM_sparse(cc)]=func_ISSM(X);
 end
 
 Pd_MDL(jj)=length(find(Ns_MDL==num))./Nt;
-Pd_AIC(jj)=length(find(Ns_AIC==num))./Nt;
+Pd_MDL_sparse(jj)=length(find(Ns_MDL_sparse==num))./Nt;
 Pd_NBIC(jj)=length(find(Ns_NBIC==num))./Nt;
 Pd_GDE(jj)=length(find(Ns_GDE==num))./Nt; 
 Pd_ISSM(jj)=length(find(Ns_ISSM==num))./Nt;
+Pd_NBIC_sparse(jj)=length(find(Ns_NBIC_sparse==num))./Nt;
+Pd_ISSM_sparse(jj)=length(find(Ns_ISSM_sparse==num))./Nt;
 
 end
-
-%%
-savefilename = strcat('./detection_probability/paper1_whitenoise_snr', num2str(snr_min), 'to', num2str(snr_max),...
-    '_snapshot',num2str(L),'_sources',num2str(num),'_sensors',num2str(Array_Num),'.mat');
-save(savefilename,'Pd_AIC','Pd_MDL','Pd_NBIC','Pd_GDE','Pd_ISSM');
-
-% pdaic=load(savefilename,'Pd_AIC');
-% pdaic=pdaic.Pd_AIC;
-% pdmdl=load(savefilename,'Pd_MDL');
-% pdmdl=pdmdl.Pd_MDL;
-% pdnbic=load(savefilename,'Pd_NBIC');
-% pdnbic=pdnbic.Pd_NBIC;
 
 %%
 rgbTriplet = 0.01*round(100*[062 043 109;...
@@ -103,19 +123,16 @@ rgbTriplet = 0.01*round(100*[062 043 109;...
 xx=snr_min:snr_max;
 
 hold on;
-plot(xx,Pd_AIC,'Color',rgbTriplet(1,:),'Marker','*');
-plot(xx,Pd_MDL,'Color',rgbTriplet(2,:),'Marker','p');
+plot(xx,Pd_MDL,'Color',rgbTriplet(1,:),'Marker','p');
+plot(xx,Pd_MDL_sparse,'Color',rgbTriplet(2,:),'Marker','p');
 plot(xx,Pd_NBIC,'Color',rgbTriplet(3,:),'Marker','o');
-plot(xx,Pd_GDE,'Color',rgbTriplet(4,:),'Marker','^');
+plot(xx,Pd_NBIC_sparse,'Color',rgbTriplet(4,:),'Marker','^');
 plot(xx,Pd_ISSM,'Color',rgbTriplet(5,:),'Marker','d');
+plot(xx,Pd_ISSM_sparse,'Color',rgbTriplet(6,:),'Marker','s');
 
 box on;
 grid on;
 xlabel('信噪比(dB)');
 ylabel('正确检测概率');
 axis([snr_min snr_max 0 1]);
-legend('AIC','MDL','NBIC','GDE','ISSM','Location','southeast');
-
-% 保存图形并指定 DPI 为 600
-print('F:/研究生事项/毕业答辩/毕业论文/论文图片/第三章白噪声下实验不同信噪比.png', '-dpng', '-r600');
-% toc;
+legend('MDL','MDL-Enhance','NBIC','NBIC-Enhance','ISSM','ISSM-Enhance','Location','southeast');

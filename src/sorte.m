@@ -4,16 +4,16 @@ close all
 
 Ns =200;
 L=Ns;
-num=3; %ä¿¡æºæ•°
+num=3; %ĞÅÔ´Êı
 %x=randn(num,Ns);
 
 
-Array_Num=7 ;% é˜µå…ƒæ•°
-d=0.5; %åœ†é˜µåŠå¾„
-lamda=1; %æ³¢é•¿
+Array_Num=7 ;% ÕóÔªÊı
+d=0.5; %Ô²Õó°ë¾¶
+lamda=1; %²¨³¤
 kk=6;
 M=Array_Num;
-% å…¥å°„è§’
+% ÈëÉä½Ç
 theta_jam1=-30;
 theta_jam2=45;
 theta_jam3=60;
@@ -23,27 +23,27 @@ theta_jam3=60;
 % theta_jam4=70;
 % theta_jam5=88;
 % degrad=pi/180;
-%æ–¹ä½è§’
+%·½Î»½Ç
 alfa_jam1=0;
 alfa_jam2=0;
 alfa_jam3=90;
 alfa_jam4=140;
 alfa_jam5=190;
 
-% æ„é€ é˜µæºæ–¹å‘å‘é‡
+% ¹¹ÔìÕóÔ´·½ÏòÏòÁ¿
 % m=[0:Array_Num-1]';
 % A1=exp(-2*pi*j*(d/lamda)*m*sin(theta1*degrad));
 % A2=exp(-2*pi*j*(d/lamda)*m*sin(theta2*degrad));
 % A3=exp(-2*pi*j*(d/lamda)*m*sin(theta3*degrad));
 % A4=exp(-2*pi*j*(d/lamda)*m*sin(theta4*degrad));
 % A5=exp(-2*pi*j*(d/lamda)*m*sin(theta5*degrad));
-% A=[A1,A2,A3,A4,A5];%æ–¹å‘çŸ©é˜µï¼›
+% A=[A1,A2,A3,A4,A5];%·½Ïò¾ØÕó£»
 s_jam1=array_form(Array_Num,d,lamda,theta_jam1,alfa_jam1,kk);
 s_jam2=array_form(Array_Num,d,lamda,theta_jam2,alfa_jam2,kk);
 s_jam3=array_form(Array_Num,d,lamda,theta_jam3,alfa_jam3,kk);
 % s_jam4=array_form(Array_Num,d,lamda,theta_jam4,alfa_jam4,kk);
 % s_jam5=array_form(Array_Num,d,lamda,theta_jam5,alfa_jam5,kk);
-A=[s_jam1;s_jam2;s_jam3];%æ–¹å‘çŸ©é˜µï¼›
+A=[s_jam1;s_jam2;s_jam3];%·½Ïò¾ØÕó£»
 A = A';
 
 Nt=1000;
@@ -58,13 +58,13 @@ for cc=1:Nt
 
   x=randn(num,Ns);
   signal=Am.*x; 
-  A1=A*signal;%æ¨¡æ‹Ÿå¤©çº¿æ¥æ”¶åˆ°çš„ä¿¡å·
+  A1=A*signal;%Ä£ÄâÌìÏß½ÓÊÕµ½µÄĞÅºÅ
  noise=randn(M,L)+j*randn(M,L);
 
 
-%  X = awgn(A1,SNR,1);%ç™½å™ªå£°æ¨¡å‹
+%  X = awgn(A1,SNR,1);%°×ÔëÉùÄ£ĞÍ
 X=A1+noise;
-R=X*X'/L; %ä¿¡å·åæ–¹å·®
+R=X*X'/L; %ĞÅºÅĞ­·½²î
 [u,v]=svd(R);
 
 D=diag(v);
@@ -85,7 +85,7 @@ for i=1:M-2
     end
 end
  [aa num_1]=sort(SORTE(1:M-3));
- SORTE(cc)=num_1(1);%ä¿¡æºæ•°
+ SORTE(cc)=num_1(1);%ĞÅÔ´Êı
 end
 Pd_SORTE(jj)=length(find(SORTE==num))./Nt;
 end

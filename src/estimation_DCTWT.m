@@ -39,7 +39,7 @@ A=A';
 monte=50;           %Monte-Carlo模拟的次数
 biort = 'near_sym_b';
 qshift = 'qshift_d';
-nlevel = 10:1:10;
+nlevel = 8:1:8;
 SNR = 10:1:30;
 accuracy_SNR_AIC = zeros(length(nlevel),length(SNR));
 accuracy_SNR_MDL = zeros(length(nlevel),length(SNR));
@@ -98,21 +98,21 @@ for level = 1:1:length(nlevel)
             [BIC,Ns_BIC(1,mk)] = func_NBIC(1/(M1*L),M1,L,R1);
            %% EMD分解
             emd_num = 8;
-            Y2 = emd(X,'MaxNumIMF',emd_num);
-            [M2,L]=size(Y2);
-%             Y21 = Y2(1:M2-1,:)+Y2(M2,:);
-            Y22 = [Y2 X];
-            Y22 = Y22';
-            [M2,L]=size(Y22);
-            R2 = Y22*Y22'/L;
-            [u2,v2] = svd(R2);
-            T2 = diag(v2);
-            Tav2 = sqrt(sum(T2));
-            T2=T2+Tav2;
-            [AIC,Ns_AIC(2,mk)] = func_AIC(M2,L,T2);
-            [MDL,Ns_MDL(2,mk)] = func_MDL(M2,L,T2);
-            [GDE,Ns_GDE(2,mk)] = func_GDE(M2,L,R2);
-            [BIC,Ns_BIC(2,mk)] = func_IBIC(1/(M2*L),M2,L,R2);
+%             Y2 = emd(X,'MaxNumIMF',emd_num);
+%             [M2,L]=size(Y2);
+% %             Y21 = Y2(1:M2-1,:)+Y2(M2,:);
+%             Y22 = [Y2 X];
+%             Y22 = Y22';
+%             [M2,L]=size(Y22);
+%             R2 = Y22*Y22'/L;
+%             [u2,v2] = svd(R2);
+%             T2 = diag(v2);
+%             Tav2 = sqrt(sum(T2));
+%             T2=T2+Tav2;
+%             [AIC,Ns_AIC(2,mk)] = func_AIC(M2,L,T2);
+%             [MDL,Ns_MDL(2,mk)] = func_MDL(M2,L,T2);
+%             [GDE,Ns_GDE(2,mk)] = func_GDE(M2,L,R2);
+%             [BIC,Ns_BIC(2,mk)] = func_IBIC(1/(M2*L),M2,L,R2);
         end
         accuracy_SNR_GDE(level,i)=length(find(Ns_GDE(1,:)==num))./monte;
         accuracy_SNR_MDL(level,i)=length(find(Ns_MDL(1,:)==num))./monte;

@@ -1,6 +1,6 @@
-%% 间隔抽样形成多通道
-% x：输入要间隔抽样信号
-% M: 要形成多通道的数目
+%% ��������γɶ�ͨ��
+% x������Ҫ��������ź�
+% M: Ҫ�γɶ�ͨ������Ŀ
 function [Y]=interval_sampling(x,M)
 
 N = length(x);

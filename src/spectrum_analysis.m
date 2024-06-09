@@ -1,7 +1,7 @@
 %==========================================================================
 %Name:      spectrum_analysis.m
-%Desc:      ä»¥é«˜æ–¯ä¿¡å·ä¸ºä¾‹ï¼Œæ±‚è§£å…¶é¢‘è°±ã€åŒè¾¹åŠŸç‡è°±ã€å•è¾¹åŠŸç‡è°±ã€åŒè¾¹åŠŸç‡è°±å¯†åº¦ã€
-%           å•è¾¹åŠŸç‡è°±å¯†åº¦ï¼Œè¿™é‡Œé«˜æ–¯ä¿¡å·çš„åŠæ³¢å…¨å®½FWHM=50psï¼Œä¸­å¿ƒç‚¹ä½äº2.5nså¤„ã€‚
+%Desc:      ÒÔ¸ßË¹ĞÅºÅÎªÀı£¬Çó½âÆäÆµÆ×¡¢Ë«±ß¹¦ÂÊÆ×¡¢µ¥±ß¹¦ÂÊÆ×¡¢Ë«±ß¹¦ÂÊÆ×ÃÜ¶È¡¢
+%           µ¥±ß¹¦ÂÊÆ×ÃÜ¶È£¬ÕâÀï¸ßË¹ĞÅºÅµÄ°ë²¨È«¿íFWHM=50ps£¬ÖĞĞÄµãÎ»ÓÚ2.5ns´¦¡£
 %Parameter: 
 %Return:    
 %Author:    yoyoba(stuyou@126.com)
@@ -10,96 +10,96 @@
 %=========================================================================
 clc;
 clear;
-FWHM=50e-12;            %é«˜æ–¯ä¿¡å·FWHMå®½åº¦ï¼Œä¸º50ps
-time_window=100*FWHM;   %é«˜æ–¯ä¿¡å·çš„é‡‡æ ·çª—å£å®½åº¦ï¼Œè¯¥å€¼å†³å®šäº†å‚…é‡Œå¶å˜æ¢åçš„é¢‘ç‡åˆ†è¾¨ç‡
-Ns=2048;                %é‡‡æ ·ç‚¹
-dt=time_window/(Ns-1);  %é‡‡æ ·æ—¶é—´é—´éš”
-t=0:dt:time_window;     %é‡‡æ ·æ—¶é—´
-gauss_time=exp(-0.5*(2*sqrt(2*log(2))*(t-2.5e-9)/FWHM).^2); %é«˜æ–¯è„‰å†²ï¼Œä¸­å¿ƒä½äº2.5nså¤„ã€‚
+FWHM=50e-12;            %¸ßË¹ĞÅºÅFWHM¿í¶È£¬Îª50ps
+time_window=100*FWHM;   %¸ßË¹ĞÅºÅµÄ²ÉÑù´°¿Ú¿í¶È£¬¸ÃÖµ¾ö¶¨ÁË¸µÀïÒ¶±ä»»ºóµÄÆµÂÊ·Ö±æÂÊ
+Ns=2048;                %²ÉÑùµã
+dt=time_window/(Ns-1);  %²ÉÑùÊ±¼ä¼ä¸ô
+t=0:dt:time_window;     %²ÉÑùÊ±¼ä
+gauss_time=exp(-0.5*(2*sqrt(2*log(2))*(t-2.5e-9)/FWHM).^2); %¸ßË¹Âö³å£¬ÖĞĞÄÎ»ÓÚ2.5ns´¦¡£
 plot(t*1e+9,gauss_time,'linewidth',2.5);
 xlabel('Time/ns');
 ylabel('Amplitude/V');
 title('Gauss pulse');
-%===========ä»¥ä¸‹è®¡ç®—åŒè¾¹è°±ã€åŒè¾¹åŠŸç‡è°±ã€åŒè¾¹åŠŸç‡è°±å¯†åº¦=================
-gauss_spec=fftshift(fft(ifftshift(gauss_time)));    %å‚…é‡Œå¶å˜æ¢ï¼Œå¹¶ä¸”è¿›è¡Œfftshiftç§»ä½æ“ä½œã€‚
-gauss_spec=gauss_spec/Ns;   %æ±‚å®é™…çš„å¹…åº¦å€¼ï¼›
-df=1/time_window;               %é¢‘ç‡åˆ†è¾¨ç‡
+%===========ÒÔÏÂ¼ÆËãË«±ßÆ×¡¢Ë«±ß¹¦ÂÊÆ×¡¢Ë«±ß¹¦ÂÊÆ×ÃÜ¶È=================
+gauss_spec=fftshift(fft(ifftshift(gauss_time)));    %¸µÀïÒ¶±ä»»£¬²¢ÇÒ½øĞĞfftshiftÒÆÎ»²Ù×÷¡£
+gauss_spec=gauss_spec/Ns;   %ÇóÊµ¼ÊµÄ·ù¶ÈÖµ£»
+df=1/time_window;               %ÆµÂÊ·Ö±æÂÊ
 k=floor(-(Ns-1)/2:(Ns-1)/2);    
 % k=0:Ns-1;
-double_f=k*df;   %åŒè¾¹é¢‘è°±å¯¹åº”çš„é¢‘ç‚¹
+double_f=k*df;   %Ë«±ßÆµÆ×¶ÔÓ¦µÄÆµµã
 
 
-figure; %å¹…åº¦è°±
+figure; %·ù¶ÈÆ×
 plot(double_f*1e-9,abs(gauss_spec),'linewidth',2.5);
 xlabel('Frequency/GHz');
 ylabel('Amplitude/V');
 title('double Amplitude spectrum');
 
 
-figure; %ç›¸ä½è°±
+figure; %ÏàÎ»Æ×
 plot(double_f*1e-9,angle(gauss_spec),'linewidth',2.5);
 xlabel('Frequency/GHz');
 ylabel('Phase/rad');
 title('double Phase spectrum');
 
 
-figure; %åŠŸç‡è°±
-double_power_spec_W=abs(gauss_spec).^2;                 %åŒè¾¹åŠŸç‡è°±ï¼Œå•ä½Wï¼›
-double_power_spec_mW=double_power_spec_W*1e+3;          %åŒè¾¹åŠŸç‡è°±ï¼Œå•ä½mWï¼›
-double_power_spec_dBm=10*log10(double_power_spec_mW);   %åŒè¾¹åŠŸç‡è°±ï¼Œå•ä½dBmï¼›
+figure; %¹¦ÂÊÆ×
+double_power_spec_W=abs(gauss_spec).^2;                 %Ë«±ß¹¦ÂÊÆ×£¬µ¥Î»W£»
+double_power_spec_mW=double_power_spec_W*1e+3;          %Ë«±ß¹¦ÂÊÆ×£¬µ¥Î»mW£»
+double_power_spec_dBm=10*log10(double_power_spec_mW);   %Ë«±ß¹¦ÂÊÆ×£¬µ¥Î»dBm£»
 plot(double_f*1e-9,double_power_spec_dBm,'linewidth',2.5);
 xlabel('Frequency/GHz');
 ylabel('Power/dBm');
 title('double Power spectrum');
 
 
-figure; %åŠŸç‡è°±å¯†åº¦
-double_power_specD_W=abs(gauss_spec).^2/(df);       %åŒè¾¹åŠŸç‡è°±å¯†åº¦,å•ä½W/Hz
-double_power_specD_mW=double_power_specD_W*1e+3;    %åŒè¾¹åŠŸç‡è°±å¯†åº¦,å•ä½mW/Hz
-double_power_specD_dBm=10*log10(double_power_specD_mW);%åŒè¾¹åŠŸç‡è°±å¯†åº¦,å•ä½dBm/Hz
+figure; %¹¦ÂÊÆ×ÃÜ¶È
+double_power_specD_W=abs(gauss_spec).^2/(df);       %Ë«±ß¹¦ÂÊÆ×ÃÜ¶È,µ¥Î»W/Hz
+double_power_specD_mW=double_power_specD_W*1e+3;    %Ë«±ß¹¦ÂÊÆ×ÃÜ¶È,µ¥Î»mW/Hz
+double_power_specD_dBm=10*log10(double_power_specD_mW);%Ë«±ß¹¦ÂÊÆ×ÃÜ¶È,µ¥Î»dBm/Hz
 plot(double_f*1e-9,double_power_specD_dBm,'linewidth',2.5);
 xlabel('Frequency/GHz');
 ylabel('Power/(dBm/Hz)');
 title('double power spectrum Density');
 
 
-%==========ä»¥ä¸‹è®¡ç®—å•è¾¹è°±ã€å•è¾¹åŠŸç‡è°±åŠå•è¾¹åŠŸç‡è°±å¯†åº¦=========
-gauss_spec=fft(ifftshift(gauss_time));  %è®¡ç®—å•è¾¹è°±æ— éœ€fftshift
-gauss_spec=gauss_spec/Ns;       %è®¡ç®—çœŸå®çš„å¹…åº¦å€¼
+%==========ÒÔÏÂ¼ÆËãµ¥±ßÆ×¡¢µ¥±ß¹¦ÂÊÆ×¼°µ¥±ß¹¦ÂÊÆ×ÃÜ¶È=========
+gauss_spec=fft(ifftshift(gauss_time));  %¼ÆËãµ¥±ßÆ×ÎŞĞèfftshift
+gauss_spec=gauss_spec/Ns;       %¼ÆËãÕæÊµµÄ·ù¶ÈÖµ
 single_gauss_spec=gauss_spec(1:floor(Ns/2));
 single_f=(0:floor(Ns/2)-1)*df;
 
 
-figure; %å¹…åº¦è°±
+figure; %·ù¶ÈÆ×
 plot(single_f*1e-9,abs(single_gauss_spec),'linewidth',2.5);
 xlabel('Frequency/GHz');
 ylabel('Amplitude/V');
 title('single Amplitude spectrum');
 
 
-figure; %ç›¸ä½è°±
+figure; %ÏàÎ»Æ×
 plot(single_f*1e-9,angle(single_gauss_spec),'linewidth',2.5);
 xlabel('Frequency/GHz');
 ylabel('Phase/rad');
 title('single Phase spectrum');
 
 
-figure;%åŠŸç‡è°±
+figure;%¹¦ÂÊÆ×
 double_power_spec_W=abs(gauss_spec).^2;  
-single_power_spec_W=2*double_power_spec_W(1:floor(Ns/2));   %å•è¾¹åŠŸç‡è°±ï¼Œå•ä½W
-single_power_spec_mW=single_power_spec_W*1e+3;              %å•è¾¹åŠŸç‡è°±ï¼Œå•ä½mWï¼›
-single_power_spec_dBm=10*log10(single_power_spec_mW);       %åŒè¾¹åŠŸç‡è°±ï¼Œå•ä½dBmï¼›
+single_power_spec_W=2*double_power_spec_W(1:floor(Ns/2));   %µ¥±ß¹¦ÂÊÆ×£¬µ¥Î»W
+single_power_spec_mW=single_power_spec_W*1e+3;              %µ¥±ß¹¦ÂÊÆ×£¬µ¥Î»mW£»
+single_power_spec_dBm=10*log10(single_power_spec_mW);       %Ë«±ß¹¦ÂÊÆ×£¬µ¥Î»dBm£»
 plot(single_f*1e-9,single_power_spec_dBm,'linewidth',2.5);  
 xlabel('Frequency/GHz');
 ylabel('Power/dBm');
 title('single Power spectrum');
 
 
-figure;%åŠŸç‡è°±å¯†åº¦
+figure;%¹¦ÂÊÆ×ÃÜ¶È
 double_power_specD_W=abs(gauss_spec).^2/(df);
-single_power_specD_W=2*double_power_specD_W(1:floor(Ns/2));         %å•è¾¹åŠŸç‡è°±å¯†åº¦ï¼Œå•ä½W/Hz
-single_power_specD_mW=single_power_specD_W*1e+3;                    %å•è¾¹åŠŸç‡è°±å¯†åº¦ï¼Œå•ä½mW/Hz
-single_power_specD_dBm=10*log10(single_power_specD_mW);             %å•è¾¹åŠŸç‡è°±å¯†åº¦ï¼Œå•ä½dBm/Hz
+single_power_specD_W=2*double_power_specD_W(1:floor(Ns/2));         %µ¥±ß¹¦ÂÊÆ×ÃÜ¶È£¬µ¥Î»W/Hz
+single_power_specD_mW=single_power_specD_W*1e+3;                    %µ¥±ß¹¦ÂÊÆ×ÃÜ¶È£¬µ¥Î»mW/Hz
+single_power_specD_dBm=10*log10(single_power_specD_mW);             %µ¥±ß¹¦ÂÊÆ×ÃÜ¶È£¬µ¥Î»dBm/Hz
 plot(single_f*1e-9,single_power_specD_mW,'linewidth',2.5);
 xlabel('Frequency/GHz');
 ylabel('Power/(dBm/Hz)');

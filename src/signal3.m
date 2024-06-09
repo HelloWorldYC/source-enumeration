@@ -5,28 +5,28 @@ fs=10000;
 T=1/fs;
 t=0:T:1;
 N=length(t);
-%-----------------------------------------ç”Ÿæˆä½é¢‘éšæœºè¿‡ç¨‹
-fa=50;                                 %ä½é¢‘è¿‡ç¨‹a(t)æˆªæ­¢é¢‘ç‡
+%-----------------------------------------Éú³ÉµÍÆµËæ»ú¹ı³Ì
+fa=50;                                 %µÍÆµ¹ı³Ìa(t)½ØÖ¹ÆµÂÊ
 wa=2*pi*fa/fs;                         
-fb=55;                                %ä½é¢‘è¿‡ç¨‹b(t)æˆªæ­¢é¢‘ç‡
+fb=55;                                %µÍÆµ¹ı³Ìb(t)½ØÖ¹ÆµÂÊ
 wb=2*pi*fb/fs;                         
-f0=2000;                                  %ä¸­å¿ƒé¢‘ç‡
-at=lowfrequency(N,wa);                    %ä½é¢‘éšæœºè¿‡ç¨‹
+f0=2000;                                  %ÖĞĞÄÆµÂÊ
+at=lowfrequency(N,wa);                    %µÍÆµËæ»ú¹ı³Ì
 figure
 subplot(2,1,1),plot(t,at)
-title('ä½é¢‘è¿‡ç¨‹a'),xlabel('t'),ylabel('b(t)')
+title('µÍÆµ¹ı³Ìa'),xlabel('t'),ylabel('b(t)')
 bt=lowfrequency(N,wb);
 subplot(2,1,2),plot(t,bt)
-title('ä½é¢‘è¿‡ç¨‹b'),xlabel('t'),ylabel('b(t)')
-%-----------------------------------------çª„å¸¦éšæœºè¿‡ç¨‹åŠæ€§è´¨
-X=at.*cos(2*pi*f0*t)-bt.*sin(2*pi*f0*t);  %çª„å¸¦éšæœºè¿‡ç¨‹
-figure,plot(t,X),title('çª„å¸¦éšæœºè¿‡ç¨‹')
-Rtau=xcorr(X);                            %è‡ªç›¸å…³å‡½æ•°
+title('µÍÆµ¹ı³Ìb'),xlabel('t'),ylabel('b(t)')
+%-----------------------------------------Õ­´øËæ»ú¹ı³Ì¼°ĞÔÖÊ
+X=at.*cos(2*pi*f0*t)-bt.*sin(2*pi*f0*t);  %Õ­´øËæ»ú¹ı³Ì
+figure,plot(t,X),title('Õ­´øËæ»ú¹ı³Ì')
+Rtau=xcorr(X);                            %×ÔÏà¹Øº¯Êı
 tt=-N+1:N-1;
-figure,plot(tt,Rtau),title('è‡ªç›¸å…³å‡½æ•°R_x(\tau)')
-Sx=fft(Rtau);                             %åŠŸç‡è°±å¯†åº¦
+figure,plot(tt,Rtau),title('×ÔÏà¹Øº¯ÊıR_x(\tau)')
+Sx=fft(Rtau);                             %¹¦ÂÊÆ×ÃÜ¶È
 len=length(Sx);
 k=0:len-1;
 w=2*pi*(k/len-1/2)*fs;
 figure,plot(w/2/pi,abs(fftshift(Sx)));xlim([-2300,2300])
-title('åŠŸç‡è°±å¯†åº¦S_x(\omega)'),xlabel('f/Hz')
+title('¹¦ÂÊÆ×ÃÜ¶ÈS_x(\omega)'),xlabel('f/Hz')
